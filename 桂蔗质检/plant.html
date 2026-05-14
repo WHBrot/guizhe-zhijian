@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甘蔗种植方法 | 桂蔗智检</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+        .back-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #2e9432;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 999;
+        }
+        .back-btn:hover {
+            background-color: #257a29;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .page-title h1 {
+            color: #2e9432;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding-bottom: 60px;
+        }
+
+        .item-box {
+            width: 350px;
+            min-height: 420px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(0,80,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0f0e0;
+        }
+
+        .item-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 24px rgba(0,80,0,0.12);
+        }
+
+        .item-box h3 {
+            color: #2e9432;
+            font-size: 20px;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .item-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #333;
+            margin: 6px 0;
+        }
+
+        .item-box strong {
+            color: #2e9432;
+            font-weight: 600;
+        }
+
+        .card-slider {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            margin-bottom: 16px;
+        }
+        .card-slider img {
+            flex: 0 0 100%;
+            height: 100%;
+            object-fit: cover;
+            scroll-snap-align: start;
+        }
+        .card-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal-content {
+            background: #fff;
+            width: 680px;
+            max-width: 92%;
+            padding: 30px;
+            border-radius: 14px;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 26px;
+            color: #666;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000;
+        }
+        #modal-desc p {
+            margin: 10px 0;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        #modal-desc strong {
+            color: #2e9432;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-logo">桂蔗智检</div>
+    <div class="nav-menu">
+        <a href="index.html">首页</a>
+        <a href="identify.html">病害查询</a>
+        <a href="knowledge.html" class="active">蔗园知识库</a>
+        <a href="contact.html">联系我们</a>
+    </div>
+</nav>
+
+<button class="back-btn" onclick="location.href='knowledge.html'">返回</button>
+
+<div class="page-title">
+    <h1>甘蔗种植方法</h1>
+</div>
+
+<div class="container">
+
+<div class="item-box" data-id="1">
+  <div class="card-slider">
+    <img src="images/种植方法/种植方法2.png" alt="甘蔗种植">
+</div>
+    <h3>1. 气候与土壤要求</h3>
+    <p><strong>温度：</strong>18~32℃最适宜，年平均气温≥20℃。</p>
+    <p><strong>光照：</strong>年日照≥1200小时，利于糖分积累。</p>
+    <p><strong>降水：</strong>1000~1500毫米，忌积水。</p>
+    <p><strong>土壤：</strong>深厚、疏松、肥沃，pH 6.0~7.5最佳。</p>
+</div>
+
+<div class="item-box" data-id="2">
+  <div class="card-slider">
+    <img src="images/种植方法/种植距离.png" alt="甘蔗种植">
+</div>
+    <h3>2. 最佳种植时间</h3>
+    <p><strong>春植蔗：</strong>2-4月，最常用、产量稳定。</p>
+    <p><strong>秋植蔗：</strong>8-10月，糖分高，需防冻。</p>
+    <p><strong>冬植蔗：</strong>11-1月，适合无霜地区。</p>
+</div>
+
+<div class="item-box" data-id="3">
+  <div class="card-slider">
+    <img src="images/种植方法/品种3.png" alt="甘蔗种植">
+</div>
+    <h3>3. 优良品种介绍</h3>
+    <p><strong>果蔗：</strong>黑皮果蔗、青皮果蔗，鲜食口感好。</p>
+    <p><strong>糖蔗：</strong>新台糖、桂糖、云蔗系列，高产高糖。</p>
+</div>
+
+<div class="item-box" data-id="4">
+  <div class="card-slider">
+    <img src="images/种植方法/品种1.png" alt="甘蔗种植">
+</div>
+    <h3>4. 选种与种茎处理</h3>
+    <p><strong>选种：</strong>粗壮、无病虫、芽眼饱满。</p>
+    <p><strong>斩种：</strong>切2~3芽一段，切口平整。</p>
+    <p><strong>消毒：</strong>多菌灵浸泡防病。</p>
+    <p><strong>催芽：</strong>露白后播种，出苗更齐。</p>
+</div>
+
+<div class="item-box" data-id="5">
+  <div class="card-slider">
+    <img src="images/种植方法/开沟.png" alt="甘蔗种植">
+</div>
+    <h3>5. 整地、开沟、施基肥</h3>
+    <p><strong>深耕：</strong>30~40厘米，疏松土壤。</p>
+    <p><strong>开沟：</strong>沟距100~120cm，深30~35cm。</p>
+    <p><strong>基肥：</strong>有机肥+复合肥，长效供肥。</p>
+</div>
+
+<div class="item-box" data-id="6">
+  <div class="card-slider">
+    <img src="images/种植方法/种植方法1.png" alt="甘蔗种植">
+</div>
+    <h3>6. 行距株距标准</h3>
+    <p><strong>行距：</strong>80~120厘米，利于通风与机械作业。</p>
+    <p><strong>株距：</strong>20~30厘米，保证有效茎数。</p>
+    <p>过密易生病，过稀产量低。</p>
+</div>
+
+<div class="item-box" data-id="7">
+  <div class="card-slider">
+    <img src="images/种植方法/旱灾.png" alt="甘蔗种植">
+</div>
+    <h3>7. 苗期管理</h3>
+    <p><strong>助出苗：</strong>干旱浇水、板结松土。</p>
+    <p><strong>补苗：</strong>缺苗超过15%立即补植。</p>
+    <p><strong>除草：</strong>芽前封闭，苗后安全药剂。</p>
+</div>
+
+<div class="item-box" data-id="8">
+  <div class="card-slider">
+    <img src="images/种植方法/出苗.png" alt="甘蔗种植">
+</div>
+    <h3>8. 生长期水肥管理</h3>
+    <p><strong>水分：</strong>前期少、中期多、后期少。</p>
+    <p><strong>施肥：</strong>分蘖期、伸长期重点追肥。</p>
+    <p><strong>微量元素：</strong>补锌、硼，防黄叶畸形。</p>
+</div>
+
+<div class="item-box" data-id="9">
+  <div class="card-slider">
+    <img src="images/种植方法/培土技术1.png" alt="甘蔗种植">
+</div>
+    <h3>9. 中耕培土技术</h3>
+    <p><strong>第一次：</strong>分蘖初期浅耕，除草松土。</p>
+    <p><strong>第二次：</strong>大培土20~30cm，防倒促根。</p>
+    <p>培土要细碎、垄饱满、沟畅通。</p>
+</div>
+
+<div class="item-box" data-id="10">
+  <div class="card-slider">
+    <img src="images/种植方法/培土技术2.png" alt="甘蔗种植">
+</div>
+    <h3>10. 防倒伏管理</h3>
+    <p>选抗倒品种、合理施肥、高培土。</p>
+    <p>剥除老叶减风阻，9月捆扎成“人”字形。</p>
+</div>
+
+<div class="item-box" data-id="11">
+  <div class="card-slider">
+    <img src="images/种植方法/培土技术2.png" alt="甘蔗种植">
+</div>
+    <h3>11. 抗旱与防涝</h3>
+    <p><strong>抗旱：</strong>覆盖蔗叶、滴灌、深种深培。</p>
+    <p><strong>防涝：</strong>开好三沟，快速排水。</p>
+    <p>台风后及时扶正、防病。</p>
+</div>
+
+<div class="item-box" data-id="12">
+  <div class="card-slider">
+    <img src="images/种植方法/成熟期.png" alt="甘蔗种植">
+</div>
+    <h3>12. 成熟期管理与收割</h3>
+    <p><strong>控氮增钾：</strong>促糖分、防徒长。</p>
+    <p><strong>适时控水：</strong>收获前1个月停水。</p>
+    <p><strong>收割：</strong>成熟度达标快砍快运。</p>
+</div>
+
+<div class="item-box" data-id="13">
+  <div class="card-slider">
+    <img src="images/种植方法/砍.png" alt="甘蔗种植">
+</div>
+    <h3>13. 宿根蔗管理</h3>
+    <p><strong>低砍留蔸：</strong>入土3~5cm，留8~12cm蔗头。</p>
+    <p><strong>松蔸：</strong>晒蔸杀菌增温。</p>
+    <p><strong>早施肥、早培土、早防虫。</strong></p>
+</div>
+
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title"></h2>
+        <div id="modal-desc"></div>
+    </div>
+</div>
+
+<script>
+const cards = document.querySelectorAll('.item-box');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+const closeBtn = document.querySelector('.close-btn');
+
+const data = {
+1:{title:"1. 气候与土壤要求",desc:`<p><strong>温度：</strong>甘蔗喜温，适宜生长温度18~32℃，年平均气温≥20℃，0℃以下易受冻。</p><p><strong>光照：</strong>年日照时数≥1200小时，光照越足，糖分越高。</p><p><strong>降水：</strong>年降水量1000~1500毫米，拔节期需水最多，忌长期积水。</p><p><strong>土壤：</strong>土层深厚、疏松肥沃、排水良好的砂壤土/壤土，pH 6.0~7.5最适宜。</p>`},
+2:{title:"2. 最佳种植时间",desc:`<p><strong>春植蔗（主流）：</strong>2-4月，气温稳定后种植，管理简单，产量最稳。</p><p><strong>秋植蔗：</strong>8-10月，生长期长，糖分高，需要做好防冻。</p><p><strong>冬植蔗：</strong>11月-次年1月，适合南方无霜地区，可延长生长期。</p>`},
+3:{title:"3. 优良品种介绍",desc:`<p><strong>果蔗（鲜食）：</strong>黑皮果蔗、青皮果蔗，皮薄、汁多、脆甜。</p><p><strong>糖蔗（制糖）：</strong>新台糖系列、桂糖系列、云蔗系列，高产、高糖、抗病抗倒。</p>`},
+4:{title:"4. 选种与种茎处理",desc:`<p><strong>选种：</strong>选用健壮、无病虫、茎粗、芽眼饱满的蔗茎。</p><p><strong>斩种：</strong>切成2~3个芽一段，切口平整，不伤芽。</p><p><strong>消毒：</strong>多菌灵浸泡10~15分钟，防止种茎带菌。</p><p><strong>催芽：</strong>堆肥或覆膜催芽，露白后播种，出苗整齐。</p>`},
+5:{title:"5. 整地、开沟、施基肥",desc:`<p><strong>整地：</strong>深耕30~40cm，打碎土块，清除杂草。</p><p><strong>开沟：</strong>行距100~120cm，沟深30~35cm，沟底平整。</p><p><strong>基肥：</strong>有机肥+复合肥混合施用，与土拌匀，不烧芽。</p>`},
+6:{title:"6. 行距株距标准",desc:`<p><strong>行距：</strong>80~120cm，方便通风、透光、机械作业。</p><p><strong>株距：</strong>20~30cm，保证每亩有效茎数。</p><p>果蔗可稍稀，糖蔗可稍密，根据品种调整。</p>`},
+7:{title:"7. 苗期管理",desc:`<p><strong>助出苗：</strong>干旱浇水、板结浅松土，帮助出苗。</p><p><strong>补苗：</strong>缺苗超过15%立即补植，保证基本苗数。</p><p><strong>除草：</strong>出苗前封闭除草，苗后用安全药剂。</p>`},
+8:{title:"8. 生长期水肥管理",desc:`<p><strong>水分：</strong>苗期少、伸长期最多、成熟期少，利于增糖。</p><p><strong>追肥：</strong>分蘖期促苗，伸长期攻茎，后期补钾壮尾。</p><p><strong>微量元素：</strong>补锌防黄叶，补硼防生长点异常。</p>`},
+9:{title:"9. 中耕培土技术",desc:`<p><strong>第一次：</strong>分蘖初期浅中耕，松土、除草、提温。</p><p><strong>第二次：</strong>伸长期大培土20~30cm，防倒伏、促根系、压杂草。</p><p>宿根蔗还要松蔸，促进低位芽萌发。</p>`},
+10:{title:"10. 防倒伏管理",desc:`<p><strong>措施：</strong>选抗倒品种、合理施肥、高培土、剥老叶。</p><p><strong>关键期：</strong>9月植株高大时，两行交叉捆成“人”字形，防风效果最好。</p>`},
+11:{title:"11. 抗旱与防涝",desc:`<p><strong>抗旱：</strong>蔗叶覆盖、滴灌、深种深培，保住水分。</p><p><strong>防涝：</strong>开好围沟、腰沟、畦沟，雨后立即排水。</p><p>台风后及时扶正、培土、防病。</p>`},
+12:{title:"12. 成熟期管理与收割",desc:`<p><strong>增糖管理：</strong>控氮、增钾、控水，促进糖分积累。</p><p><strong>适时收割：</strong>上下锤度一致时最佳，砍后尽快送榨。</p><p><strong>宿根蔗：</strong>大寒后收割，防冻害、保芽。</p>`},
+13:{title:"13. 宿根蔗管理",desc:`<p><strong>砍收：</strong>快锄低砍，留8~12cm蔗头，切口平整。</p><p><strong>松蔸：</strong>春季回暖后破垄露蔸，晒15~20天。</p><p><strong>管理：</strong>比新植蔗早施肥、早培土、早防虫，产量更高。</p>`}
+};
+
+cards.forEach(card => {
+    card.addEventListener('dblclick', function(){
+        const id = this.dataset.id;
+        modalTitle.textContent = data[id].title;
+        modalDesc.innerHTML = data[id].desc;
+        modal.style.display = 'flex';
+    });
+});
+
+closeBtn.onclick = () => modal.style.display = 'none';
+modal.onclick = e => e.target === modal && (modal.style.display = 'none');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head>
+     <meta charset="UTF-8">
+     <title>联系我们 - 桂蔗智检</title>
+     <style>
+         *{
+             margin: 0;
+             padding: 0;
+             box-sizing: border-box;
+         }
+         body{
+             background: url(你的背景图.jpg) no-repeat center center fixed;
+             background-size: cover;
+             font-family: "微软雅黑",sans-serif;
+         }
+         nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+         .contact-wrap{
+             width: 1200px;
+             margin: 50px auto;
+             display: flex;
+             gap: 40px;
+         }
+         .contact-card{
+             flex: 1;
+             background: rgba(255,255,255,0.94);
+             border-radius: 14px;
+             padding: 35px;
+             box-shadow: 0 4px 16px rgba(0,80,0,0.15);
+         }
+         .contact-card h2{
+             color: #2e9432;
+             margin-bottom: 25px;
+             padding-bottom: 10px;
+             border-bottom: 2px solid #2e9432;
+         }
+         .info-item{
+             line-height: 2.5;
+             font-size: 16px;
+             color: #333;
+         }
+         .info-item b{
+             color: #247a28;
+         }
+         .input-item{
+             width: 100%;
+             padding: 12px 15px;
+             margin: 10px 0;
+             border: 1px solid #b8ddb8;
+             border-radius: 8px;
+             font-size: 15px;
+         }
+         textarea{
+             height: 150px;
+             resize: none;
+         }
+         .submit-btn{
+             width: 100%;
+             padding: 14px;
+             background: #2e9432;
+             color: #fff;
+             border: none;
+             border-radius: 8px;
+             font-size: 17px;
+             cursor: pointer;
+             margin-top:10px;
+         }
+         .submit-btn:hover{
+             background: #247a28;
+         }
+         /* 关键：固定高度容器，锁住不塌陷 */
+         .form-wrap{
+             position: relative;
+             height: 320px;
+         }
+         #formBox, #successBox{
+             position: absolute;
+             left: 0;
+             top: 0;
+             width: 100%;
+         }
+         .success-box{
+             text-align: center;
+             padding-top: 40px;
+         }
+         .circle-check{
+             width: 80px;
+             height: 80px;
+             border: 4px solid #2e9432;
+             border-radius: 50%;
+             margin: 0 auto 20px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-size: 42px;
+             color: #2e9432;
+         }
+         .success-box h3{
+             color: #333;
+             margin-bottom: 30px;
+             font-size: 18px;
+         }
+         .success-btns button{
+             margin: 0 8px;
+             padding: 10px 22px;
+             border: none;
+             border-radius: 6px;
+             cursor: pointer;
+             font-size: 15px;
+         }
+         .btn-back{
+             background: #ccc;
+             color: #333;
+         }
+         .btn-refill{
+             background: #2e9432;
+             color: #fff;
+         }
+     </style>
+ </head>
+ <body>
+ <nav>
+     <div class="nav-logo">桂蔗智检</div>
+     <div class="nav-menu">
+         <a href="index.html">首页</a>
+         <a href="identify.html">病害查询</a>
+         <a href="knowledge.html">蔗园知识库</a>
+         <a href="contact.html" class="active">联系我们</a>
+     </div>
+ </nav>
+ <div class="contact-wrap">
+     <div class="contact-card">
+         <h2>联系方式</h2>
+         <div class="info-item"><b>开发团队：</b>桂蔗智检科创小组</div>
+         <div class="info-item"><b>所在院校：</b>广西城市职业大学</div>
+         <div class="info-item"><b>联系邮箱：</b>guizhezhijian@xxx.com</div>
+         <div class="info-item"><b>联系地址：</b>广西崇左市</div>
+         <div class="info-item"><b>项目简介：</b>专注甘蔗病虫害AI智能识别与科学种植服务</div>
+     </div>
+     <div class="contact-card">
+         <h2>在线留言</h2>
+         <!-- 固定高度容器，锁住不收缩 -->
+         <div class="form-wrap">
+             <div id="formBox">
+                 <input id="nameVal" type="text" class="input-item" placeholder="请输入您的姓名">
+                 <input id="telVal" type="text" class="input-item" placeholder="请输入联系电话/邮箱">
+                 <textarea id="msgVal" class="input-item" placeholder="请输入您想咨询的内容..."></textarea>
+                 <button class="submit-btn" onclick="showSuccess()">提交留言</button>
+             </div>
+             <div class="success-box" id="successBox" style="display:none;">
+                 <div class="circle-check">√</div>
+                 <h3>填写完成！</h3>
+                 <div class="success-btns">
+                     <button class="btn-back" onclick="backToForm()">返回</button>
+                     <button class="btn-refill" onclick="resetForm()">再填一份</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ <script>
+     function showSuccess(){
+         let name = document.getElementById('nameVal').value.trim();
+         let tel = document.getElementById('telVal').value.trim();
+         let msg = document.getElementById('msgVal').value.trim();
+         if(name === "" || tel === "" || msg === ""){
+             alert("请填写完整所有内容后再提交！");
+             return;
+         }
+         document.getElementById('formBox').style.display = 'none';
+         document.getElementById('successBox').style.display = 'block';
+     }
+     function backToForm(){
+         document.getElementById('successBox').style.display = 'none';
+         document.getElementById('formBox').style.display = 'block';
+     }
+     function resetForm(){
+         document.getElementById('nameVal').value = "";
+         document.getElementById('telVal').value = "";
+         document.getElementById('msgVal').value = "";
+         document.getElementById('successBox').style.display = 'none';
+         document.getElementById('formBox').style.display = 'block';
+     }
+ </script>
+ </body>
+ </html>

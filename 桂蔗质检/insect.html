@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甘蔗病害专区 | 桂蔗智检</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        /* 顶部导航栏 和 首页完全统一 */
+        nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+        /* 左上角圆形返回按钮 */
+        .back-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* 做成圆形 */
+            background-color: #2e9432;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            position: fixed; /* 固定在左上角 */
+            top: 80px; /* 导航栏下面一点 */
+            left: 20px;
+            z-index: 999; /* 保证按钮在最上层 */
+        }
+        .back-btn:hover {
+            background-color: #257a29; /* 鼠标放上去稍微变深 */
+        }
+
+         /* 页面标题区域 */
+        .page-title {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .page-title h1 {
+            color: #2e9432;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        /* 页面主体（你后续可以在这里加内容） */
+       .container {
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding-bottom: 60px;
+        }
+
+       .item-box {
+    width: 260px; /* 固定卡片宽度，不会乱拉长 */
+    min-height: 420px; /* 最小统一高度，所有卡片一样齐 */
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,80,0,0.1);
+    transition: all 0.3s ease;
+    /* 新增：让内容永远自动撑开，不会挤压变形 */
+    display: flex;
+    flex-direction: column;
+}
+
+
+        .item-box:hover {
+            background-color: #f0f9f0;
+            transform: translateY(-5px);
+        }
+        .item-box h2 {
+            color: #2e9432;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .item-box h3 {
+    color: #2e9432;
+    margin: 8px 0 12px 0;
+    font-size: 20px;
+}
+.item-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 6px 0;
+}
+
+        .item-box .tip {
+            color: #888;
+            font-size: 15px;
+        }
+        .item-box img {
+    width: 100%;
+    height: 180px; /* 统一图片高度 */
+    object-fit: cover; /* 图片不变形，自动裁剪适配 */
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+        /* 弹窗遮罩层 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* 弹窗内容框 */
+.modal-content {
+  background: #fff;
+  width: 600px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* 关闭按钮 */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+#modal-desc p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+#modal-desc strong {
+  color: #2e9432; /* 用你标题的绿色 */
+}
+
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航栏（和你其他页面完全一样） -->
+ <nav>
+        <div class="nav-logo">桂蔗智检</div>
+        <div class="nav-menu">
+            <a href="index.html">首页</a>
+            <a href="identify.html">病害查询</a>
+            <a href="knowledge.html" class="active">蔗园知识库</a>
+            <a href="contact.html">联系我们</a>
+        </div>
+    </nav>
+
+
+<!-- 左上角圆形返回按钮 -->
+<button class="back-btn" onclick="location.href='knowledge.html'">返回</button>
+
+<!-- 页面主体区域（你后续可以在这里加内容） -->
+<div class="page-title">
+    <h1>甘蔗虫害专区</h1>
+</div>
+<!-- 你的小卡片代码，就放在这里！ -->
+    <div class="container">
+<div class="item-box" data-id="1">
+    <img  src="images/病虫/甘蔗蓟马.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗蓟马</h3>
+         <p><strong>病虫样子</strong>成虫体长1.2~1.4毫米，体暗褐色至黑褐色，翅狭长透明，边缘生有长缨毛，体型微小，行动敏捷。</p>
+         <p><strong>危害部位与症状</strong>以成虫、若虫隐蔽在甘蔗心叶中锉吸汁液，受害叶片出现黄白色褪绿条斑，叶尖卷缩干枯，严重时心叶无法展开，呈“牛尾巴”状，植株矮黄，影响甘蔗拔节生长。</p>
+         <p><strong>农业防治：</strong>加强田间管理，合理排灌，促进甘蔗早生快发，加快心叶展开，减少蓟马栖息场所。</p>
+         <p><strong>化学防治：</strong>卷叶率达5%以上时，选用25%噻虫嗪水分散粒剂、1.8%阿维菌素乳油或乙基多杀菌素，重点对心叶喷雾防治。</p>
+     </div>
+     <div class="item-box" data-id="2">
+        <img  src="images/病虫/甘蔗螟虫.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗螟虫</h3>
+         <p><strong>病虫样子</strong>成虫多为灰褐色蛾子，幼虫多为淡黄色或黄褐色，头部赤褐色，体节分明，常见种类有二点螟、黄螟、条螟。</p>
+         <p><strong>危害部位与症状</strong>主要蛀食甘蔗茎秆，苗期危害造成枯心苗；中后期蛀入茎内，破坏输导组织，造成枯梢、断尾，茎秆遇风易折断，蛀孔处常可见虫粪和流胶，严重影响甘蔗产量和糖分积累。</p>
+         <p><strong>农业防治：</strong>选用无虫种苗，收获后及时清理残茎枯梢，减少越冬虫源。</p>
+         <p><strong>生物防治：</strong>螟卵盛期释放赤眼蜂，或利用红蚂蚁捕食幼虫。</p>
+         <p><strong>化学防治：</strong>螟卵盛孵期，用氯虫苯甲酰胺、杀虫双等药剂淋根或喷雾；大培土时施入颗粒剂进行根区防护。</p>
+     </div>
+     <div class="item-box" data-id="3">
+        <img  src="images/病虫/蔗龟.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：蔗龟</h3>
+          <p><strong>病虫样子</strong>成虫多为棕褐色或黑色甲虫，体表坚硬有光泽，幼虫为乳白色蛴螬，呈C形弯曲，体型肥硕。</p>
+         <p><strong>危害部位与症状</strong>成虫咬食甘蔗基部，形成半球形缺口，造成枯心苗；幼虫在地下取食蔗根、蛀食蔗茎地下部，导致蔗株生长停滞、叶片黄萎，遇风易倒伏，宿根蔗发苗率显著下降。</p>
+         <p><strong>农业防治：</strong>农业防治：水旱轮作（如与花生、甘薯轮作），减少土壤中虫源；收获后翻耕土壤，暴露越冬幼虫。</p>
+         <p><strong>物理防治：</strong>4-6月用黑光灯诱杀成虫。</p>
+         <p><strong>化学防治：</strong>种植或大培土时，每亩用3%辛硫磷颗粒剂4-5公斤施于蔗头处；受害严重时，在蔗株基部钻孔灌注杀虫剂药液毒杀地下幼虫。</p>
+     </div>
+     <div class="item-box" data-id="4">
+        <img  src="images/病虫/蚜虫.jpg" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗蚜虫</h3>
+           <p><strong>病虫样子</strong>无翅孤雌蚜卵圆形，体长1.9~2.4毫米，体表覆盖厚蜡粉或蜡丝，呈白色絮状；有翅蚜体型稍小，具透明翅。</p>
+         <p><strong>危害部位与症状</strong>群集在甘蔗叶片背面、叶鞘及茎秆上吸食汁液，导致叶片褪绿黄化、卷曲畸形；分泌的蜜露会诱发煤烟病，影响光合作用，造成植株矮缩、产量下降。</p>
+         <p><strong>农业防治：</strong>及时剥除枯老叶鞘，改善蔗田通风透光条件，减少蚜虫繁殖环境。</p>
+         <p><strong>生物防治：</strong>保护瓢虫、草蛉、食蚜蝇等天敌。</p>
+         <p><strong>化学防治：</strong>点片发生时，喷施40%乐果乳油1000倍液或50%抗蚜威可湿性粉剂2000倍液，重点喷叶片背面。</p>
+     </div>
+ </div>
+ </div>
+<!-- 双击卡片后弹出的窗口 -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <img id="modal-img" src="" alt="病害图片"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h2 id="modal-title"></h2>
+    <p id="modal-desc"></p>
+  </div>
+</div> 
+
+<script>
+ const cards = document.querySelectorAll('.item-box');
+   const modal = document.getElementById('modal');
+   const modalImg = document.getElementById('modal-img');
+   const modalTitle = document.getElementById('modal-title');
+   const modalDesc = document.getElementById('modal-desc');
+   const closeBtn = document.querySelector('.close-btn');
+   // 1. 这里是新加的病害数据
+   const diseaseData = {
+     1: {
+       title: "甘蔗蓟马",
+       img: "images/病虫/甘蔗蓟马.png",
+       desc: `
+         <p><strong>病虫样子</strong>成虫体长1.2~1.4毫米，体暗褐色至黑褐色，翅狭长透明，边缘生有长缨毛，体型微小，行动敏捷。</p>
+         <p><strong>危害部位与症状</strong>以成虫、若虫隐蔽在甘蔗心叶中锉吸汁液，受害叶片出现黄白色褪绿条斑，叶尖卷缩干枯，严重时心叶无法展开，呈“牛尾巴”状，植株矮黄，影响甘蔗拔节生长。</p>
+         <p><strong>农业防治：</strong>加强田间管理，合理排灌，促进甘蔗早生快发，加快心叶展开，减少蓟马栖息场所。</p>
+         <p><strong>化学防治：</strong>卷叶率达5%以上时，选用25%噻虫嗪水分散粒剂、1.8%阿维菌素乳油或乙基多杀菌素，重点对心叶喷雾防治。</p>
+       `
+     },
+     2: {
+       title: "甘蔗螟虫",
+       img: "images/病虫/甘蔗螟虫.png",
+       desc: `
+          <p><strong>病虫样子</strong>成虫多为灰褐色蛾子，幼虫多为淡黄色或黄褐色，头部赤褐色，体节分明，常见种类有二点螟、黄螟、条螟。</p>
+         <p><strong>危害部位与症状</strong>主要蛀食甘蔗茎秆，苗期危害造成枯心苗；中后期蛀入茎内，破坏输导组织，造成枯梢、断尾，茎秆遇风易折断，蛀孔处常可见虫粪和流胶，严重影响甘蔗产量和糖分积累。</p>
+         <p><strong>农业防治：</strong>选用无虫种苗，收获后及时清理残茎枯梢，减少越冬虫源。</p>
+         <p><strong>生物防治：</strong>螟卵盛期释放赤眼蜂，或利用红蚂蚁捕食幼虫。</p>
+         <p><strong>化学防治：</strong>螟卵盛孵期，用氯虫苯甲酰胺、杀虫双等药剂淋根或喷雾；大培土时施入颗粒剂进行根区防护。</p>
+       `
+     },
+      3: {
+       title: "蔗龟",
+       img: "images/病虫/蔗龟.png",
+       desc: `
+          <p><strong>病虫样子</strong>成虫多为棕褐色或黑色甲虫，体表坚硬有光泽，幼虫为乳白色蛴螬，呈C形弯曲，体型肥硕。</p>
+         <p><strong>危害部位与症状</strong>成虫咬食甘蔗基部，形成半球形缺口，造成枯心苗；幼虫在地下取食蔗根、蛀食蔗茎地下部，导致蔗株生长停滞、叶片黄萎，遇风易倒伏，宿根蔗发苗率显著下降。</p>
+         <p><strong>农业防治：</strong>农业防治：水旱轮作（如与花生、甘薯轮作），减少土壤中虫源；收获后翻耕土壤，暴露越冬幼虫。</p>
+         <p><strong>物理防治：</strong>4-6月用黑光灯诱杀成虫。</p>
+         <p><strong>化学防治：</strong>种植或大培土时，每亩用3%辛硫磷颗粒剂4-5公斤施于蔗头处；受害严重时，在蔗株基部钻孔灌注杀虫剂药液毒杀地下幼虫。</p>
+       `
+     },
+      4: {
+       title: "甘蔗蚜虫",
+       img: "images/病虫/蚜虫.jpg",
+       desc: `
+          <p><strong>病虫样子</strong>无翅孤雌蚜卵圆形，体长1.9~2.4毫米，体表覆盖厚蜡粉或蜡丝，呈白色絮状；有翅蚜体型稍小，具透明翅。</p>
+         <p><strong>危害部位与症状</strong>群集在甘蔗叶片背面、叶鞘及茎秆上吸食汁液，导致叶片褪绿黄化、卷曲畸形；分泌的蜜露会诱发煤烟病，影响光合作用，造成植株矮缩、产量下降。</p>
+         <p><strong>农业防治：</strong>及时剥除枯老叶鞘，改善蔗田通风透光条件，减少蚜虫繁殖环境。</p>
+         <p><strong>生物防治：</strong>保护瓢虫、草蛉、食蚜蝇等天敌。</p>
+         <p><strong>化学防治：</strong>点片发生时，喷施40%乐果乳油1000倍液或50%抗蚜威可湿性粉剂2000倍液，重点喷叶片背面。</p>
+       `
+     },
+   };
+   // 2. 这里是修改后的双击事件
+   cards.forEach(card => {
+     card.addEventListener('dblclick', function() {
+       const id = this.getAttribute('data-id');
+       const data = diseaseData[id];
+       modalImg.src = data.img;
+       modalTitle.textContent = data.title;
+       modalDesc.innerHTML = data.desc;
+       modal.style.display = 'flex';
+     });
+   });
+
+  // 点击关闭按钮或遮罩层关闭弹窗
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>

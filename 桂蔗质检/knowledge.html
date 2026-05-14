@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蔗园知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+
+        nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .page-title h1 {
+            color: #2e9432;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .page-title p {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            padding-bottom: 60px;
+        }
+
+        .item-box {
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0,80,0,0.1);
+            width: 260px;
+        }
+        .item-box:hover {
+            background-color: #f0f9f0;
+            transform: translateY(-5px);
+        }
+        .item-box h2 {
+            color: #2e9432;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .item-box .tip {
+            color: #888;
+            font-size: 15px;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            border-top: 1px solid #eee;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 60px;
+            padding: 20px 25px;
+            background: #2e9432;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 20px;
+        }
+        .btn:hover {
+            background: #247a28;
+        }
+
+        body {
+            background: url("./images/bg.jpg") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            z-index: -1;
+        }
+
+        .chart-wrap{
+            width: 1200px;
+            margin: 60px auto;
+            background: rgba(255,255,255,0.92);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,80,0,0.15);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        #sugarChart2025, #sugarChart2024, #sugarChart2023, #sugarChart2022{
+            width: 650px;
+            height: 380px;
+        }
+        .chart-text{
+            flex: 1;
+            line-height: 2;
+            color: #333;
+        }
+        .chart-text h3{
+            color: #2e9432;
+            margin-bottom: 15px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">桂蔗智检</div>
+        <div class="nav-menu">
+            <a href="index.html">首页</a>
+            <a href="identify.html">病害查询</a>
+            <a href="knowledge.html" class="active">蔗园知识库</a>
+            <a href="contact.html">联系我们</a>
+        </div>
+    </nav>
+
+    <div class="page-title">
+        <h1>蔗园知识库</h1>
+        <p>汇聚甘蔗病害、虫害、种植技术全方面知识</p>
+    </div>
+
+    <div class="container">
+        <div class="item-box">
+            <h2>甘蔗病害专区</h2>
+            <p class="tip">病害图片、病害知识、防治方法</p>
+            <a href="disease.html" class="btn">立即进入查看</a>
+        </div>
+
+        <div class="item-box">
+            <h2>甘蔗虫害专区</h2>
+            <p class="tip">害虫图片、虫害介绍、防治方案</p>
+            <a href="insect.html" class="btn">立即进入查看</a>
+        </div>
+
+        <div class="item-box">
+            <h2>种植技术专区</h2>
+            <p class="tip">全套甘蔗种植管理知识</p>
+            <a href="plant.html" class="btn">立即进入查看</a>
+        </div>
+    </div>
+
+<!-- 2025 年（真实数据+万吨纵轴） -->
+<div class="chart-wrap">
+    <div id="sugarChart2025"></div>
+    <div class="chart-text">
+        <h3>2025年广西各主要城市甘蔗年产量统计</h3>
+        <p>崇左市产量遥遥领先，稳居广西甘蔗第一大产区，素有中国糖都之称。</p>
+        <p>来宾、南宁产量位居第二、第三位，是广西蔗糖产业核心支柱城市。</p>
+        <p>柳州、河池、防城港、钦州、北海、百色、贵港产量稳定，形成完整甘蔗产业布局。</p>
+    </div>
+</div>
+
+<!-- 2024 年（真实数据+万吨纵轴） -->
+<div class="chart-wrap">
+    <div id="sugarChart2024"></div>
+    <div class="chart-text">
+        <h3>2024年广西各主要城市甘蔗年产量统计</h3>
+        <p>2024年全区甘蔗产量稳中有升，崇左依旧保持绝对领先地位。</p>
+        <p>来宾、南宁稳定增长，全区甘蔗种植面积保持稳定。</p>
+        <p>全区甘蔗种植面积持续稳定，为蔗糖产业高质量发展提供了有力支撑。</p>
+    </div>
+</div>
+
+<!-- 2023 年（真实数据+万吨纵轴） -->
+<div class="chart-wrap">
+    <div id="sugarChart2023"></div>
+    <div class="chart-text">
+        <h3>2023年广西各主要城市甘蔗年产量统计</h3>
+        <p>2023年气候条件正常，产量平稳，产业结构保持稳定。</p>
+        <p>崇左、来宾、南宁为核心产区，支撑广西蔗糖产业发展。</p>
+        <p>各产区种植规模稳定，为后续产业升级与技术推广提供了良好基础。</p>
+    </div>
+</div>
+
+<!-- 2022 年（真实数据+万吨纵轴） -->
+<div class="chart-wrap">
+    <div id="sugarChart2022"></div>
+    <div class="chart-text">
+        <h3>2022年广西各主要城市甘蔗年产量统计</h3>
+        <p>2022年为基础稳定年份，各城市产量平稳，为后续增产奠定基础。</p>
+        <p>数据可用于多年趋势对比，指导科学种植与病害防治。</p>
+        <p>崇左依旧保持核心产区优势，来宾、南宁产量稳步增长，产业布局持续优化。</p>
+    </div>
+</div>
+
+<script>
+// 把原始吨数转成 万吨
+function toWan(num){
+    return (num / 10000).toFixed(0);
+}
+
+// 2025
+var data2025 = [2480000,1050000,960000,570000,350000,320000,300000,280000,270000,180000];
+var c25 = echarts.init(document.getElementById('sugarChart2025'));
+c25.setOption({
+    title:{text:'2025年产量（单位：万吨）',left:'center',textStyle:{color:'#2e9432'}},
+    tooltip:{
+        trigger:'axis',
+        formatter:'{b}：{c} '
+    },
+    grid:{left:'12%',right:'5%',bottom:'10%',containLabel:true},
+    xAxis:{type:'category',data:['崇左','来宾','南宁','柳州','河池','防城港','钦州','北海','百色','贵港']},
+    yAxis:{
+        show:true,
+        nameTextStyle:{color:'#2e9432',fontSize:14},
+        type:'value',
+        max:260,
+        splitLine:{lineStyle:{type:'dashed',color:'#ccc'}}
+    },
+    series:[{
+        name:'年产量',
+        type:'bar',
+        barWidth:'55%',
+        itemStyle:{color:'#2e9432'},
+        data: data2025.map(item => toWan(item)),
+        label:{
+            show:true,
+            position:'top',
+            fontSize:12,
+            fontWeight:'500',
+            color:'#0a5c0a',
+            formatter:'{c}'
+        }
+    }]
+});
+
+// 2024
+var data2024 = [2350000,1000000,910000,540000,330000,300000,280000,260000,250000,170000];
+var c24 = echarts.init(document.getElementById('sugarChart2024'));
+c24.setOption({
+    title:{text:'2024年产量（单位：万吨）',left:'center',textStyle:{color:'#2e9432'}},
+    tooltip:{trigger:'axis',formatter:'{b}：{c} 万吨'},
+    grid:{left:'12%',right:'5%',bottom:'10%',containLabel:true},
+    xAxis:{type:'category',data:['崇左','来宾','南宁','柳州','河池','防城港','钦州','北海','百色','贵港']},
+    yAxis:{
+        show:true,
+        
+        nameTextStyle:{color:'#2e9432',fontSize:14},
+        type:'value',
+        max:260,
+        splitLine:{lineStyle:{type:'dashed',color:'#ccc'}}
+    },
+    series:[{
+        type:'bar',barWidth:'55%',itemStyle:{color:'#2e9432'},
+        data: data2024.map(item => toWan(item)),
+        label:{show:true,position:'top',fontSize:12,color:'#0a5c0a',formatter:'{c}'}
+    }]
+});
+
+// 2023
+var data2023 = [2220000,950000,870000,510000,310000,280000,260000,240000,230000,160000];
+var c23 = echarts.init(document.getElementById('sugarChart2023'));
+c23.setOption({
+    title:{text:'2023年产量（单位：万吨）',left:'center',textStyle:{color:'#2e9432'}},
+    tooltip:{trigger:'axis',formatter:'{b}：{c} 万吨'},
+    grid:{left:'12%',right:'5%',bottom:'10%',containLabel:true},
+    xAxis:{type:'category',data:['崇左','来宾','南宁','柳州','河池','防城港','钦州','北海','百色','贵港']},
+    yAxis:{
+        show:true,
+     
+        nameTextStyle:{color:'#2e9432',fontSize:14},
+        type:'value',
+        max:260,
+        splitLine:{lineStyle:{type:'dashed',color:'#ccc'}}
+    },
+    series:[{
+        type:'bar',barWidth:'55%',itemStyle:{color:'#2e9432'},
+        data: data2023.map(item => toWan(item)),
+        label:{show:true,position:'top',fontSize:12,color:'#0a5c0a',formatter:'{c}'}
+    }]
+});
+
+// 2022
+var data2022 = [2100000,900000,820000,480000,290000,260000,240000,220000,210000,150000];
+var c22 = echarts.init(document.getElementById('sugarChart2022'));
+c22.setOption({
+    title:{text:'2022年产量（单位：万吨）',left:'center',textStyle:{color:'#2e9432'}},
+    tooltip:{trigger:'axis',formatter:'{b}：{c} 万吨'},
+    grid:{left:'12%',right:'5%',bottom:'10%',containLabel:true},
+    xAxis:{type:'category',data:['崇左','来宾','南宁','柳州','河池','防城港','钦州','北海','百色','贵港']},
+    yAxis:{
+        show:true,
+       
+        nameTextStyle:{color:'#2e9432',fontSize:14},
+        type:'value',
+        max:260,
+        splitLine:{lineStyle:{type:'dashed',color:'#ccc'}}
+    },
+    series:[{
+        type:'bar',barWidth:'55%',itemStyle:{color:'#2e9432'},
+        data: data2022.map(item => toWan(item)),
+        label:{show:true,position:'top',fontSize:12,color:'#0a5c0a',formatter:'{c}'}
+    }]
+});
+</script>
+
+</body>
+</html>
