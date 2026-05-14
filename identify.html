@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>桂蔗智检 - 病虫害查询</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            background-color: #009933;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* 三栏布局容器 */
+        .container {
+            display: flex;
+            height: calc(100vh - 50px);
+        }
+
+        /* 左侧：症状查询区 */
+        .left-panel {
+            width: 250px;
+            background-color: white;
+            border-right: 1px solid #eee;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .left-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .menu-card {
+            margin-bottom: 10px;
+            border: 1px solid #009933;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #009933;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-body {
+            display: none;
+            padding: 10px;
+        }
+        .card-body.open {
+            display: block;
+        }
+        .sub-item {
+            margin-bottom: 8px;
+        }
+        .sub-header {
+            background-color: #e6f9e6;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 3px;
+        }
+        .sub-body {
+            display: none;
+            padding: 8px 10px;
+            background-color: #f8fff8;
+        }
+        .sub-body.open {
+            display: block;
+        }
+        .sym-btn {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            margin: 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .sym-btn:hover {
+            background-color: #d9d9d9;
+        }
+        .sym-btn.active {
+            background-color: #009933;
+            color: white;
+        }
+        .arrow {
+            transition: transform 0.3s;
+        }
+        .arrow.open {
+            transform: rotate(180deg);
+        }
+
+        /* 中间：已选标签区 */
+        .middle-panel {
+            width: 300px;
+            background-color: white;
+            border-right: 1px solid #eee;
+            padding: 15px;
+        }
+        .middle-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        #tagList {
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+        .tag-item {
+            display: inline-block;
+            background-color: #e6f9e6;
+            color: #009933;
+            padding: 6px 12px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .tag-close {
+            margin-left: 8px;
+            color: #666;
+            cursor: pointer;
+        }
+        .tag-close:hover {
+            color: red;
+        }
+        .query-btn {
+            background-color: #009933;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .query-btn:hover {
+            background-color: #007a29;
+        }
+
+        /* 右侧：检查结果区 */
+        .right-panel {
+            flex: 1;
+            background-color: white;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .right-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        #emptyTip {
+            color: #999;
+            text-align: center;
+            margin-top: 100px;
+        }
+        #resultBox {
+            display: none;
+            background-color: #f8fff8;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccebcc;
+        }
+        
+      /* 👇👇👇 这里是改成图1小巧风格的核心代码 👇👇👇 */
+      #resultBox {
+        display: none;
+        padding: 10px !important;
+        background: transparent;
+        border: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .result-card {
+          background: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 2px 8px rgba(0, 153, 51, 0.12);
+          margin: 0;
+          overflow: hidden;
+          border: 1px solid #e8f5e9;
+      }
+      .result-card .card-img {
+          width: 100%;
+          height: 140px;
+          object-fit: cover;
+          object-position: center;
+      }
+      .result-text-area {
+          padding: 14px;
+      }
+      .result-text-area h4 {
+          margin: 0 0 8px 0;
+          color: #007a29;
+          font-size: 16px;
+          font-weight: bold;
+      }
+      .result-text-area p {
+          margin: 0;
+          color: #333;
+          font-size: 13px;
+          line-height: 1.5;
+          text-align: left;
+      }
+      
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <div class="nav-title">桂蔗智检</div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="identify.html" style="text-decoration: underline;">病害查询</a>
+            <a href="knowledge.html">蔗园知识库</a>
+            <a href="contact.html">联系我们</a>
+        </div>
+    </div>
+
+    <!-- 三栏主体 -->
+    <div class="container">
+        <!-- 左侧：症状查询区 -->
+        <div class="left-panel">
+            <h3>症状查询</h3>
+            <!-- 病害区 -->
+            <div class="menu-card">
+                <div class="card-header" onclick="toggle('card1','arrow1')">
+                    <span>🍃 病害区</span>
+                    <span class="arrow" id="arrow1">▼</span>
+                </div>
+                <div class="card-body" id="card1">
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('leaf','arrowLeaf')">
+                            <span>叶子颜色</span>
+                            <span class="arrow" id="arrowLeaf">▼</span>
+                        </div>
+                        <div class="sub-body" id="leaf">
+                            <div class="sym-btn" onclick="toggleTag(this)">红色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黑色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">红褐色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黄色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">绿色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">白色</div>
+                        </div>
+                    </div>
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('smell','arrowSmell')">
+                            <span>气味特征</span>
+                            <span class="arrow" id="arrowSmell">▼</span>
+                        </div>
+                        <div class="sub-body" id="smell">
+                            <div class="sym-btn" onclick="toggleTag(this)">凤梨香味</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">腐臭味</div>
+                        </div>
+                    </div>
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('stem','arrowStem')">
+                            <span>茎秆症状</span>
+                            <span class="arrow" id="arrowStem">▼</span>
+                        </div>
+                        <div class="sub-body" id="stem">
+                            <div class="sym-btn" onclick="toggleTag(this)">植株矮小</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">叶片细弱</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">内部发红</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">不萌芽</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">条斑</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">条纹</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黄斑</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黄化</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">扭曲皱缩</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黄色小斑点</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">小斑</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">斑块</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">分蘖少</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">长条斑</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 害虫区 -->
+            <div class="menu-card">
+                <div class="card-header" onclick="toggle('pestCard','arrowPestCard')">
+                    <span>🐛 害虫区</span>
+                    <span class="arrow" id="arrowPestCard">▼</span>
+                </div>
+                <div class="card-body" id="pestCard">
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('pestColor','arrowPestColor')">
+                            <span>病虫颜色及特征</span>
+                            <span class="arrow" id="arrowPestColor">▼</span>
+                        </div>
+                        <div class="sub-body" id="pestColor">
+                            <div class="sym-btn" onclick="toggleTag(this)">黄色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黄褐色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">赤褐色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">白色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">黑褐色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">棕褐色</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">长缨毛</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">翅蚜体型</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">体型肥硕</div>
+                        </div>
+                    </div>
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('pestPos','arrowPestPos')">
+                            <span>危害部位</span>
+                            <span class="arrow" id="arrowPestPos">▼</span>
+                        </div>
+                        <div class="sub-body" id="pestPos">
+                            <div class="sym-btn" onclick="toggleTag(this)">甘蔗茎秆</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">茎内</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">甘蔗心叶</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">甘蔗基部</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">蔗根</div>
+                        </div>
+                    </div>
+                    <div class="sub-item">
+                        <div class="sub-header" onclick="toggle('pestSym','arrowPestSym')">
+                            <span>危害症状</span>
+                            <span class="arrow" id="arrowPestSym">▼</span>
+                        </div>
+                        <div class="sub-body" id="pestSym">
+                            <div class="sym-btn" onclick="toggleTag(this)">断尾</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">卷曲畸形</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">植株矮缩</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">褪绿条斑</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">叶尖卷缩</div>
+                            <div class="sym-btn" onclick="toggleTag(this)">叶片黄萎</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 种植方法区 -->
+            <div class="menu-card">
+                <div class="card-header" onclick="toggle('plantCard','arrowPlantCard')">
+                    <span>🌱 种植方法区</span>
+                    <span class="arrow" id="arrowPlantCard">▼</span>
+                </div>
+                <div class="card-body" id="plantCard">
+                    <div class="sym-btn" onclick="toggleTag(this)">气候土壤要求</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">最佳种植时间</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">优良品种介绍</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">选种与种茎处理</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">整地开沟施肥</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">种植行距株距</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">苗期管理</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">生长期水肥管理</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">中耕培土技术</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">防倒伏管理</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">抗旱防涝管理</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">成熟期管理与收割</div>
+                    <div class="sym-btn" onclick="toggleTag(this)">宿根蔗管理</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中间：已选标签区 -->
+        <div class="middle-panel">
+            <h3>已选标签</h3>
+            <div id="tagList"></div>
+            <button class="query-btn" onclick="doQuery()">立即查询</button>
+        </div>
+
+        <!-- 右侧：检查结果区 -->
+        <div class="right-panel">
+            <h3>检查结果</h3>
+            <div id="emptyTip">请在左侧选择症状标签，点击立即查询</div>
+            <div id="resultBox">
+                <h4>匹配结果</h4>
+                <p id="resultText"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 病害标签匹配完整资料
+const dataBase = {
+    "红色": "【甘蔗凤梨病】\n发病原因和症状：由凤梨病菌侵染蔗种切口或伤口引起，通过土壤或带菌种苗传播。病蔗切口先发红，后变黑腐烂，带有类似凤梨的气味，严重时不能萌芽。\n危害后果：造成烂种、缺苗、出苗差，影响整田长势，降低后期产量。\n防治方法：选用健康蔗种，播种前药剂处理，减少机械损伤，及时清理病残体。",
+    "凤梨香味": "【甘蔗凤梨病】\n发病原因和症状：由凤梨病菌侵染蔗种切口或伤口引起，通过土壤或带菌种苗传播。病蔗切口先发红，后变黑腐烂，带有类似凤梨的气味，严重时不能萌芽。\n危害后果：造成烂种、缺苗、出苗差，影响整田长势，降低后期产量。\n防治方法：选用健康蔗种，播种前药剂处理，减少机械损伤，及时清理病残体。",
+    "不萌芽": "【甘蔗凤梨病】\n发病原因和症状：由凤梨病菌侵染蔗种切口或伤口引起，通过土壤或带菌种苗传播。病蔗切口先发红，后变黑腐烂，带有类似凤梨的气味，严重时不能萌芽。\n危害后果：造成烂种、缺苗、出苗差，影响整田长势，降低后期产量。\n防治方法：选用健康蔗种，播种前药剂处理，减少机械损伤，及时清理病残体。",
+
+    "植株矮小": "【甘蔗黑穗病】\n发病原因和症状：由黑穗病菌侵染引起，通过病苗、土壤、风雨传播。病株表现为植株矮小、节间缩短、叶片细弱，后期顶部抽出黑色鞭状穗，散出大量黑粉。\n危害后果：影响甘蔗正常生长，造成植株退化、严重减产，病株基本失去种植价值。\n防治方法：选用抗病品种，严禁用病株留种，发现病株及时拔除销毁，重病田避免宿根连作。",
+    "叶片细弱": "【甘蔗黑穗病】\n发病原因和症状：由黑穗病菌侵染引起，通过病苗、土壤、风雨传播。病株表现为植株矮小、节间缩短、叶片细弱，后期顶部抽出黑色鞭状穗，散出大量黑粉。\n危害后果：影响甘蔗正常生长，造成植株退化、严重减产，病株基本失去种植价值。\n防治方法：选用抗病品种，严禁用病株留种，发现病株及时拔除销毁，重病田避免宿根连作。",
+
+    "内部发红": "【甘蔗赤腐病】\n发病原因和症状：由赤腐病菌侵染引起，通过种茎、病残体、雨水、伤口传播。病叶中肋出现红色条斑并扩大，茎秆内部组织变红腐烂。\n危害后果：导致植株腐烂、倒伏、干枯，显著降低产量和含糖量。\n防治方法：选用抗病品种，减少伤口，清除病残体，及时处理病株，不用病蔗留种。",
+
+    "黄化": "【甘蔗梢腐病】\n发病原因和症状：由镰刀菌等真菌侵染引起，通过病残体、气流传播。心叶基部先黄化，出现红褐色条纹，叶片扭曲皱缩，严重时梢头腐烂。\n危害后果：甘蔗生长受阻，影响光合作用与糖分积累，严重时整株枯死。\n防治方法：选用抗病品种，合理施肥，不偏施氮肥，及时清除病株，发病初期喷药。",
+    "扭曲皱缩": "【甘蔗梢腐病】\n发病原因和症状：由镰刀菌等真菌侵染引起，通过病残体、气流传播。心叶基部先黄化，出现红褐色条纹，叶片扭曲皱缩，严重时梢头腐烂。\n危害后果：甘蔗生长受阻，影响光合作用与糖分积累，严重时整株枯死。\n防治方法：选用抗病品种，合理施肥，不偏施氮肥，及时清除病株，发病初期喷药。",
+
+    "黄斑": "【甘蔗黄斑病】\n发病原因和症状：由黄斑病菌侵染引起，高温多湿易流行。叶片初期出现黄色小斑点，后扩展成黄斑，后期转为红褐色。\n危害后果：叶片早枯，绿色面积减少，削弱光合作用，影响产量与糖分积累。\n防治方法：加强田间管理，保持通风透光，清除病叶，发病初期喷药防治。",
+    "黄色小斑点": "【甘蔗黄斑病】\n发病原因和症状：由黄斑病菌侵染引起，高温多湿易流行。叶片初期出现黄色小斑点，后扩展成黄斑，后期转为红褐色。\n危害后果：叶片早枯，绿色面积减少，削弱光合作用，影响产量与糖分积累。\n防治方法：加强田间管理，保持通风透光，清除病叶，发病初期喷药防治。",
+
+    "小斑": "【甘蔗赤斑病】\n发病原因和症状：由赤斑病菌侵染引起，温暖潮湿易传播。叶片先出现黄色小斑，后扩大为红色或红褐色斑块，可融合成片。\n危害后果：破坏叶片功能，降低光合效率，植株早衰，影响产量。\n防治方法：选用抗病品种，及时清除病叶，收获后清洁田间，发病初期喷药控制。",
+    "斑块": "【甘蔗赤斑病】\n发病原因和症状：由赤斑病菌侵染引起，温暖潮湿易传播。叶片先出现黄色小斑，后扩大为红色或红褐色斑块，可融合成片。\n危害后果：破坏叶片功能，降低光合效率，植株早衰，影响产量。\n防治方法：选用抗病品种，及时清除病叶，收获后清洁田间，发病初期喷药控制。",
+
+    "条纹": "【甘蔗花叶病】\n发病原因和症状：由花叶病毒侵染引起，通过带病种苗和蚜虫传播。叶片出现黄绿相间条纹、斑驳，植株矮化、分蘖少。\n危害后果：影响生长，造成减产、降糖分，田间长势不整齐。\n防治方法：使用无病种苗，选用抗病品种，及时拔除病株，加强蚜虫防治。",
+    "分蘖少": "【甘蔗花叶病】\n发病原因和症状：由花叶病毒侵染引起，通过带病种苗和蚜虫传播。叶片出现黄绿相间条纹、斑驳，植株矮化、分蘖少。\n危害后果：影响生长，造成减产、降糖分，田间长势不整齐。\n防治方法：使用无病种苗，选用抗病品种，及时拔除病株，加强蚜虫防治。",
+
+    "白色": "【甘蔗白条病】\n发病原因和症状：由白条病菌侵染引起，通过病苗、刀具、虫鼠传播。叶片出现白色细长条斑，严重时整株发白、枯死。\n危害后果：植株衰弱，影响生长与产量，严重造成大片减产。\n防治方法：严格检疫种苗，发现病株立即拔除，病区不留种，加强工具消毒。",
+    "长条斑": "【甘蔗白条病】\n发病原因和症状：由白条病菌侵染引起，通过病苗、刀具、虫鼠传播。叶片出现白色细长条斑，严重时整株发白、枯死。\n危害后果：植株衰弱，影响生长与产量，严重造成大片减产。\n防治方法：严格检疫种苗，发现病株立即拔除，病区不留种，加强工具消毒。"
+};
+// 害虫标签匹配完整资料
+const pestDataBase = {
+    "黄褐色": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+    "淡黄色": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+    "赤褐色": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+    "灰褐色": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+    "甘蔗茎秆": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+    "断尾": "【甘蔗螟虫】\n样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。\n危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。\n防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。",
+
+    "白色": "【甘蔗蚜虫】\n样子：无翅蚜卵圆形，长1.9~2.4毫米，体表覆厚蜡粉呈白色絮状；有翅蚜体型稍小、透明翅。\n危害部位与症状：群集叶背、叶鞘、茎秆吸食汁液，致叶片褪绿黄化、卷曲畸形；蜜露诱发煤烟病，植株矮缩、减产。\n防治方法：剥老叶鞘、通风透光；保护瓢虫、草蛉；喷40%乐果1000倍或50%抗蚜威2000倍，重点喷叶背。",
+    "翅蚜体型": "【甘蔗蚜虫】\n样子：无翅蚜卵圆形，长1.9~2.4毫米，体表覆厚蜡粉呈白色絮状；有翅蚜体型稍小、透明翅。\n危害部位与症状：群集叶背、叶鞘、茎秆吸食汁液，致叶片褪绿黄化、卷曲畸形；蜜露诱发煤烟病，植株矮缩、减产。\n防治方法：剥老叶鞘、通风透光；保护瓢虫、草蛉；喷40%乐果1000倍或50%抗蚜威2000倍，重点喷叶背。",
+    "甘蔗心叶": "【甘蔗蓟马】\n样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。\n危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。\n防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。",
+    "长缨毛": "【甘蔗蓟马】\n样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。\n危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。\n防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。",
+    "黑褐色": "【甘蔗蓟马】\n样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。\n危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。\n防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。",
+    "褪绿条斑": "【甘蔗蓟马】\n样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。\n危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。\n防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。",
+    "叶尖卷缩": "【甘蔗蓟马】\n样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。\n危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。\n防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。",
+
+    "棕褐色": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。",
+    "黑色": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。",
+    "体型肥硕": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。",
+    "甘蔗基部": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。",
+    "蔗根": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。",
+    "叶片黄萎": "【蔗龟】\n样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。\n危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。\n防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。"
+};
+// 种植方法标签匹配内容
+const plantDataBase = {
+    "气候土壤要求": "【甘蔗适合种植的气候和土壤要求】\n🌞 气候条件：喜温喜光，适宜温度18~32℃，年平均气温≥20℃；0℃以下易冻害，成熟期昼夜温差10℃利于糖分积累；年降水1000~1500毫米，生长盛期持水量80%；年日照≥1200小时。\n🌍 土壤要求：土层深厚、疏松肥沃、排水好的砂壤土/壤土，pH6.0~7.5；有机质≥2%，保水保肥强。",
+
+    "最佳种植时间": "【甘蔗最佳种植时间】\n🌱 春植蔗（主流）：2-4月（气温≥13℃），广西/广东2-3月，产量稳定。\n🍂 秋植蔗：8-10月，生长期长、糖分高，越冬防霜冻。\n❄️ 冬植蔗：11月-次年1月（南方无霜冻区），延长生长期、提宿根产量，做好保温抗旱。",
+
+    "优良品种介绍": "【甘蔗优良品种介绍】\n🍭 果蔗（鲜食）：黑皮果蔗（紫黑发亮、皮薄肉脆、汁多）；青皮果蔗（青绿清甜、耐储运）。\n🍬 糖蔗（制糖）：新台糖ROC22（高产高糖、宿根强、抗倒伏）；桂糖42号（早熟高糖、抗病、广西主栽）；云蔗05-51（高产稳产、耐瘠薄、适合山区）。",
+
+    "选种与种茎处理": "【甘蔗选种与种茎处理】\n✅ 选种：无病虫、茎粗、芽饱满，优先梢部2-3段；剔除虫蛀、空心、冻害蔗茎。\n🧪 处理：斩成2-3芽种段、切口平整；50%多菌灵500倍液浸10-15分钟消毒；堆肥/薄膜催芽，露白后播种。",
+
+    "整地开沟施肥": "【甘蔗整地、开沟、基肥技术】\n🪓 整地：深耕30-40厘米、耙碎土块；坡地做等高梯田防水土流失。\n🛤️ 开沟：沟距100-120cm、深30-35cm、底宽20-25cm；东西走向、排水好。\n🧪 基肥：腐熟农家肥1500-2000kg/亩 + 复合肥(15-15-15)30-40kg/亩；沟底混匀，不接触种茎防烧芽。",
+
+    "种植行距株距": "【甘蔗种植行距、株距标准】\n最佳：株距20-30cm、行距80-120cm。\n过密：通风差、茎细弱、病虫多、减产25%+。\n过疏：有效茎数不足、产量低。\n品种差异：果蔗行距1.1-1.3m、株距20-25cm；糖蔗可放宽至1.4-1.5m。",
+
+    "苗期管理": "【甘蔗苗期管理】\n核心：齐、匀、壮。\n抗旱：表土硬结轻划表土；干旱淋水或地膜保墒。\n补苗：缺苗>15%及时补，营养杯苗带土移栽、浇定根水。\n除草：出苗前喷乙草胺封闭；3-5叶期精喹禾本除草、避高温中午。",
+
+    "生长期水肥管理": "【甘蔗生长期水肥管理】\n💧 水分：苗期60%-70%；伸长期80%-85%（需水高峰、沟灌）；成熟期60%（控水增糖）。\n🧪 施肥：基肥+追肥；分蘖期尿素10-15kg/亩；伸长期尿素20-25kg+氯化钾15-20kg/亩；后期补钾、喷锌/硼叶面肥。",
+
+    "中耕培土技术": "【甘蔗中耕培土技术】\n第一次：分蘖初期、深5-7cm，松土除草、提地温。\n第二次：伸长期大培土、高20-30cm，促气生根、抗倒伏、埋杂草。\n后期：1-2次浅除草；宿根蔗萌芽前松蔸、促低位芽。",
+
+    "防倒伏管理": "【甘蔗防倒伏管理】\n选抗倒伏品种、茎硬粗壮。\n合理施肥：控氮增钾、苗期壮苗。\n深沟高培土：扎根深、稳。\n剥老叶：减负重、降风阻。\n扎蔗：9月2米高时交叉捆成人字形。",
+
+    "抗旱防涝管理": "【甘蔗抗旱、防涝管理】\n抗旱：选抗旱品种；蔗叶覆盖行间；深种深培土；滴灌精准补水。\n防涝：修三沟排水；雨后追高钾复合肥、培土；台风前剥老叶、雨后扶正捆扎；雨后防病虫。",
+
+    "成熟期管理与收割": "【甘蔗成熟期管理与收割】\n管理：控氮增钾、收前1月停水；排水防积水；剥枯叶、通风透光；防后期病虫。\n收割：看锤度、先熟先收；宿根蔗大寒后收割、留蔸；快锄低砍、切口平整；砍下尽快送榨、防黑穗病扩散。",
+
+    "宿根蔗管理": "【宿根甘蔗管理】\n砍收：快锄低砍、入土3-5cm、留8-12cm蔗头、蔗叶还田。\n松蔸：春暖后破垄10-15cm、晾晒15-20天、杀菌增温。\n补苗：缺苗及时补种。\n水肥：早施肥（复合肥+尿素）、早培土；后期追壮尾肥。\n除草防虫：封闭除草、颗粒剂防虫。"
+};
+        // 折叠/展开菜单
+        function toggle(bodyId, arrowId) {
+            const body = document.getElementById(bodyId);
+            const arrow = document.getElementById(arrowId);
+            body.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        const selectedTags = new Set();
+
+        // 选中/取消标签
+        function toggleTag(el) {
+            const text = el.innerText;
+            el.classList.toggle('active');
+            if (selectedTags.has(text)) {
+                selectedTags.delete(text);
+            } else {
+                selectedTags.add(text);
+            }
+            renderTags();
+        }
+
+        // 渲染中间的已选标签
+        function renderTags() {
+    const list = document.getElementById('tagList');
+    list.innerHTML = '';
+    selectedTags.forEach(tag => {
+        const item = document.createElement('div');
+        item.className = 'tag-item';
+        item.innerHTML = tag + ' <span class="tag-close" onclick="removeTag(\'' + tag + '\')">×</span>';
+        list.appendChild(item);
+    });
+}
+
+        // 删除标签
+        function removeTag(tag) {
+            selectedTags.delete(tag);
+            document.querySelectorAll('.sym-btn').forEach(el => {
+                if (el.innerText === tag) el.classList.remove('active');
+            });
+            renderTags();
+        }
+
+        // 查询按钮
+function doQuery() {
+    const emptyTip = document.getElementById('emptyTip');
+    const resultBox = document.getElementById('resultBox');
+
+    if (selectedTags.size === 0) {
+        alert('请先选择标签');
+        return;
+    }
+
+    emptyTip.style.display = 'none';
+    resultBox.style.display = 'grid';
+    resultBox.innerHTML = '';
+
+    // 病害卡片数据
+    const diseaseCardData = [
+        {
+            name: "甘蔗黑穗病",
+            keywords: ["黑色","植株矮小","叶片细弱"],
+            img: "./images/病害/黑穗病.png",
+            content: `【甘蔗黑穗病】
+发病原因和症状：黑穗病菌侵染，土壤、种苗、风雨传播。病株矮小、节间缩短、叶片细弱，后期长出黑色鞭状黑穗，布满黑粉。
+危害后果：甘蔗严重矮化、不抽茎，减产可达50%以上。
+防治方法：选用抗病品种，彻底拔除烧毁病株，避免宿根连作，种茎消毒。`
+        },
+        {
+            name: "甘蔗凤梨病",
+            keywords: ["红色","黑色","凤梨香味","不萌芽"],
+            img: "./images/病害/凤梨病.png",
+            content: `【甘蔗凤梨病】
+发病原因和症状：真菌从蔗种切口、伤口侵入，初期切口变红，后期发黑腐烂，散发凤梨香气，蔗种难以萌发。
+危害后果：大面积烂种、缺苗断垄，出苗率极低。
+防治方法：精选健康蔗种，播种前药剂浸种消毒，减少砍种伤口，及时清理田间病残体。`
+        },
+        {
+            name: "甘蔗赤腐病",
+            keywords: ["红色","红褐色","内部发红"],
+            img: "./images/病害/赤腐病.png",
+            content: `【甘蔗赤腐病】
+发病原因和症状：通过伤口、雨水、病残体传播。叶片中肋出现红色条斑，蔗茎内部变红、髓心腐烂。
+危害后果：蔗茎倒伏、干枯、糖分大幅下降，品质报废。
+防治方法：减少田间机械损伤，选用耐病品种，彻底清理病株残体。`
+        },
+        {
+            name: "甘蔗梢腐病",
+            keywords: ["黄化","红褐色","扭曲皱缩"],
+            img: "./images/病害/梢腐病.png",
+            content: `【甘蔗梢腐病】
+发病原因和症状：镰刀菌侵染，气流传播。心叶基部黄化、出现红褐色条纹，叶片畸形扭曲皱缩，蔗梢腐烂坏死。
+危害后果：顶芽枯死、停止长高，整株长势衰败。
+防治方法：控施氮肥、增施磷钾肥，及时割除发病心叶，发病初期喷杀菌剂。`
+        },
+        {
+            name: "甘蔗黄斑病",
+            keywords: ["黄色","黄色小斑点","黄斑"],
+            img: "./images/病害/黄斑病.png",
+            content: `【甘蔗黄斑病】
+发病原因和症状：高温高湿极易爆发，叶片先长出黄色小斑点，逐渐扩大连片黄斑，后期转为红褐色枯死。
+危害后果：大量叶片提前干枯，光合能力骤降，产量下滑。
+防治方法：合理密植保证通风透光，摘除底部病老叶，雨季提前喷药预防。`
+        },
+        {
+            name: "甘蔗赤斑病",
+            keywords: ["红褐色","黄色","小斑","斑块"],
+            img: "./images/病害/赤斑病.png",
+            content: `【甘蔗赤斑病】
+发病原因和症状：温暖潮湿环境快速扩散，叶片初生黄色小病斑，扩展为红褐色赤斑，连片焦枯。
+危害后果：叶片早衰、长势衰弱。
+防治方法：清洁田园减少菌源，发病初期喷施保护性杀菌剂。`
+        },
+        {
+            name: "甘蔗花叶病",
+            keywords: ["条纹","分蘖少"],
+            img: "./images/病害/花叶病.png",
+            content: `【甘蔗花叶病】
+发病原因和症状：病毒病害，种苗、蚜虫带毒传播。叶片出现黄绿相间条纹、斑驳，植株矮缩、分蘖大幅变少。
+危害后果：持续减产、蔗糖含量持续降低。
+防治方法：严格选用无病健康种苗，全程防治蚜虫媒介，发现病株立刻铲除。`
+        },
+        {
+            name: "甘蔗白条病",
+            keywords: ["白色","长条斑","条纹"],
+            img: "./images/病害/白条病.png",
+            content: `【甘蔗白条病】
+发病原因和症状：细菌性病害，刀具、种苗、昆虫传播。叶片出现白色细长长条斑，严重时整片发白枯死。
+危害后果：蔗株长势极差，成片大面积减产。
+防治方法：严格检疫引种，修剪工具彻底消毒，发现病株连根拔除带出田外销毁。`
+        }
+    ];
+
+    // 害虫卡片数据
+    const pestCardData = [
+        {
+            name: "甘蔗螟虫",
+            keywords: ["黄褐色","淡黄色","赤褐色","灰褐色","甘蔗茎秆","断尾"],
+            img: "./images/病虫/螟虫.png",
+            content: `【甘蔗螟虫】
+样子：成虫多为灰褐色蛾子，幼虫淡黄色或黄褐色，头部赤褐色，体节分明，有二点螟、黄螟、条螟等。
+危害部位与症状：蛀食甘蔗茎秆，苗期致枯心苗；中后期蛀茎，造成枯梢、断尾、易折断，蛀孔有虫粪、流胶，减产降糖。
+防治方法：选无虫种苗、清残茎；螟卵期放赤眼蜂；卵孵期用氯虫苯甲酰胺、杀虫双喷雾或淋根。`
+        },
+        {
+            name: "甘蔗蚜虫",
+            keywords: ["白色","翅蚜体型"],
+            img: "./images/病虫/蚜虫.png",
+            content: `【甘蔗蚜虫】
+样子：无翅蚜卵圆形，长1.9~2.4毫米，体表覆厚蜡粉呈白色絮状；有翅蚜体型稍小、透明翅。
+危害部位与症状：群集叶背、叶鞘、茎秆吸食汁液，致叶片褪绿黄化、卷曲畸形；蜜露诱发煤烟病，植株矮缩、减产。
+防治方法：剥老叶鞘、通风透光；保护瓢虫、草蛉；喷40%乐果1000倍或50%抗蚜威2000倍，重点喷叶背。`
+        },
+        {
+            name: "甘蔗蓟马",
+            keywords: ["黑褐色","长缨毛","甘蔗心叶","褪绿条斑","叶尖卷缩"],
+            img: "./images/病虫/蓟马.png",
+            content: `【甘蔗蓟马】
+样子：成虫长1.2~1.4毫米，暗褐至黑褐色，翅狭长透明、边缘长缨毛，微小敏捷。
+危害部位与症状：心叶锉吸汁液，叶片黄白褪绿条斑、叶尖卷缩干枯，心叶难展呈“牛尾巴”，植株矮黄、生长受阻。
+防治方法：合理排灌、促早发；卷叶率>5%时，用噻虫嗪、阿维菌素、乙基多杀菌素重点喷心叶。`
+        },
+        {
+            name: "蔗龟",
+            keywords: ["棕褐色","黑色","体型肥硕","甘蔗基部","蔗根","叶片黄萎"],
+            img: "./images/病虫/蔗龟.png",
+            content: `【蔗龟】
+样子：成虫棕褐或黑色甲虫、坚硬有光泽；幼虫乳白色蛴螬、C形弯曲、体型肥硕。
+危害部位与症状：成虫咬食基部致枯心苗；幼虫地下食蔗根、蛀地下茎，生长停滞、叶片黄萎、易倒伏，宿根发苗差。
+防治方法：水旱轮作、翻耕；4-6月黑光灯诱杀；种植/大培土施3%辛硫磷颗粒剂，受害重时灌药毒幼虫。`
+        }
+    ];
+
+    // 种植卡片数据
+    const plantCardData = [
+        {
+            name: "甘蔗气候土壤要求",
+            keywords: ["气候土壤要求"],
+            img: "./images/种植方法/种植方法1.png",
+            content: `【甘蔗适合种植的气候和土壤要求】
+🌞 气候条件：喜温喜光，适宜温度18~32℃，年平均气温≥20℃；0℃以下易冻害，成熟期昼夜温差10℃利于糖分积累；年降水1000~1500毫米，生长盛期持水量80%；年日照≥1200小时。
+🌍 土壤要求：土层深厚、疏松肥沃、排水好的砂壤土/壤土，pH6.0~7.5；有机质≥2%，保水保肥强。`
+        },
+        {
+            name: "甘蔗最佳种植时间",
+            keywords: ["最佳种植时间"],
+            img: "./images/种植方法/种植方法1.png",
+            content: `【甘蔗最佳种植时间】
+🌱 春植蔗（主流）：2-4月（气温≥13℃），广西/广东2-3月，产量稳定。
+🍂 秋植蔗：8-10月，生长期长、糖分高，越冬防霜冻。
+❄️ 冬植蔗：11月-次年1月（南方无霜冻区），延长生长期、提宿根产量，做好保温抗旱。`
+        },
+        {
+            name: "甘蔗优良品种介绍",
+            keywords: ["优良品种介绍"],
+            img: "./images/种植方法/培土技术1.png",
+            content: `【甘蔗优良品种介绍】
+🍭 果蔗（鲜食）：黑皮果蔗（紫黑发亮、皮薄肉脆、汁多）；青皮果蔗（青绿清甜、耐储运）。
+🍬 糖蔗（制糖）：新台糖ROC22（高产高糖、宿根强、抗倒伏）；桂糖42号（早熟高糖、抗病、广西主栽）；云蔗05-51（高产稳产、耐瘠薄、适合山区）。`
+        },
+        {
+            name: "甘蔗选种与种茎处理",
+            keywords: ["选种与种茎处理"],
+            img: "./images/种植方法/种植方法2.png",
+            content: `【甘蔗选种与种茎处理】
+✅ 选种：无病虫、茎粗、芽饱满，优先梢部2-3段；剔除虫蛀、空心、冻害蔗茎。
+🧪 处理：斩成2-3芽种段、切口平整；50%多菌灵500倍液浸10-15分钟消毒；堆肥/薄膜催芽，露白后播种。`
+        },
+        {
+            name: "甘蔗整地开沟施肥",
+            keywords: ["整地开沟施肥"],
+            img: "./images/种植方法/培土技术2.png",
+            content: `【甘蔗整地、开沟、基肥技术】
+🪓 整地：深耕30-40厘米、耙碎土块；坡地做等高梯田防水土流失。
+🛤️ 开沟：沟距100-120cm、深30-35cm、底宽20-25cm；东西走向、排水好。
+🧪 基肥：腐熟农家肥1500-2000kg/亩 + 复合肥(15-15-15)30-40kg/亩；沟底混匀，不接触种茎防烧芽。`
+        },
+        {
+            name: "甘蔗种植行距株距",
+            keywords: ["种植行距株距"],
+            img: "./images/种植方法/种植方法1.png",
+            content: `【甘蔗种植行距、株距标准】
+最佳：株距20-30cm、行距80-120cm。
+过密：通风差、茎细弱、病虫多、减产25%+。
+过疏：有效茎数不足、产量低。
+品种差异：果蔗行距1.1-1.3m、株距20-25cm；糖蔗可放宽至1.4-1.5m。`
+        },
+        {
+            name: "甘蔗苗期管理",
+            keywords: ["苗期管理"],
+            img: "./images/种植方法/出苗.png",
+            content: `【甘蔗苗期管理】
+核心：齐、匀、壮。
+抗旱：表土硬结轻划表土；干旱淋水或地膜保墒。
+补苗：缺苗>15%及时补，营养杯苗带土移栽、浇定根水。
+除草：出苗前喷乙草胺封闭；3-5叶期精喹禾本除草、避高温中午。`
+        },
+        {
+            name: "甘蔗生长期水肥管理",
+            keywords: ["生长期水肥管理"],
+            img: "./images/种植方法/出苗.png",
+            content: `【甘蔗生长期水肥管理】
+💧 水分：苗期60%-70%；伸长期80%-85%（需水高峰、沟灌）；成熟期60%（控水增糖）。
+🧪 施肥：基肥+追肥；分蘖期尿素10-15kg/亩；伸长期尿素20-25kg+氯化钾15-20kg/亩；后期补钾、喷锌/硼叶面肥。`
+        },
+        {
+            name: "甘蔗中耕培土技术",
+            keywords: ["中耕培土技术"],
+            img: "./images/种植方法/培土技术2.png",
+            content: `【甘蔗中耕培土技术】
+第一次：分蘖初期、深5-7cm，松土除草、提地温。
+第二次：伸长期大培土、高20-30cm，促气生根、抗倒伏、埋杂草。
+后期：1-2次浅除草；宿根蔗萌芽前松蔸、促低位芽。`
+        },
+        {
+            name: "甘蔗防倒伏管理",
+            keywords: ["防倒伏管理"],
+            img: "./images/种植方法1/种植方法1.png",
+            content: `【甘蔗防倒伏管理】
+选抗倒伏品种、茎硬粗壮。
+合理施肥：控氮增钾、苗期壮苗。
+深沟高培土：扎根深、稳。
+剥老叶：减负重、降风阻。
+扎蔗：9月2米高时交叉捆成人字形。`
+        },
+        {
+            name: "甘蔗抗旱防涝管理",
+            keywords: ["抗旱防涝管理"],
+            img: "./images/种植方法/旱灾.png",
+            content: `【甘蔗抗旱、防涝管理】
+抗旱：选抗旱品种；蔗叶覆盖行间；深种深培土；滴灌精准补水。
+防涝：修三沟排水；雨后追高钾复合肥、培土；台风前剥老叶、雨后扶正捆扎；雨后防病虫。`
+        },
+        {
+            name: "甘蔗成熟期管理与收割",
+            keywords: ["成熟期管理与收割"],
+            img: "./images/种植方法/成熟期.png",
+            content: `【甘蔗成熟期管理与收割】
+管理：控氮增钾、收前1月停水；排水防积水；剥枯叶、通风透光；防后期病虫。
+收割：看锤度、先熟先收；宿根蔗大寒后收割、留蔸；快锄低砍、切口平整；砍下尽快送榨、防黑穗病扩散。`
+        },
+        {
+            name: "宿根甘蔗管理",
+            keywords: ["宿根蔗管理"],
+            img: "./images/种植方法/砍.png",
+            content: `【宿根甘蔗管理】
+砍收：快锄低砍、入土3-5cm、留8-12cm蔗头、蔗叶还田。
+松蔸：春暖后破垄10-15cm、晾晒15-20天、杀菌增温。
+补苗：缺苗及时补种。
+水肥：早施肥（复合肥+尿素）、早培土；后期追壮尾肥。
+除草防虫：封闭除草、颗粒剂防虫。`
+        }
+    ];
+
+    // 合并所有数据
+    const allData = [...diseaseCardData, ...pestCardData, ...plantCardData];
+    const matched = new Set();
+
+    selectedTags.forEach(tag => {
+        allData.forEach(item => {
+            if (item.keywords.includes(tag) && !matched.has(item.name)) {
+                matched.add(item.name);
+
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <img src="${item.img}" class="card-img" alt="${item.name}">
+                    <div class="result-text-area">
+                        <h4>${item.name}</h4>
+                        <p>${item.content.replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+                resultBox.appendChild(card);
+            }
+        });
+    });
+}
+    </script>
+</body>
+</html>

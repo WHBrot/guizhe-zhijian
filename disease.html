@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甘蔗病害专区 | 桂蔗智检</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        /* 顶部导航栏 和 首页完全统一 */
+        nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+        /* 左上角圆形返回按钮 */
+        .back-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* 做成圆形 */
+            background-color: #2e9432;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            position: fixed; /* 固定在左上角 */
+            top: 80px; /* 导航栏下面一点 */
+            left: 20px;
+            z-index: 999; /* 保证按钮在最上层 */
+        }
+        .back-btn:hover {
+            background-color: #257a29; /* 鼠标放上去稍微变深 */
+        }
+
+         /* 页面标题区域 */
+        .page-title {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .page-title h1 {
+            color: #2e9432;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        /* 页面主体（你后续可以在这里加内容） */
+       .container {
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding-bottom: 60px;
+        }
+
+       .item-box {
+    width: 260px; /* 固定卡片宽度，不会乱拉长 */
+    min-height: 420px; /* 最小统一高度，所有卡片一样齐 */
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,80,0,0.1);
+    transition: all 0.3s ease;
+    /* 新增：让内容永远自动撑开，不会挤压变形 */
+    display: flex;
+    flex-direction: column;
+}
+
+
+        .item-box:hover {
+            background-color: #f0f9f0;
+            transform: translateY(-5px);
+        }
+        .item-box h2 {
+            color: #2e9432;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .item-box h3 {
+    color: #2e9432;
+    margin: 8px 0 12px 0;
+    font-size: 20px;
+}
+.item-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 6px 0;
+}
+
+        .item-box .tip {
+            color: #888;
+            font-size: 15px;
+        }
+        .item-box img {
+    width: 100%;
+    height: 180px; /* 统一图片高度 */
+    object-fit: cover; /* 图片不变形，自动裁剪适配 */
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+        /* 弹窗遮罩层 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* 弹窗内容框 */
+.modal-content {
+  background: #fff;
+  width: 600px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* 关闭按钮 */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+#modal-desc p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+#modal-desc strong {
+  color: #2e9432; /* 用你标题的绿色 */
+}
+
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航栏（和你其他页面完全一样） -->
+ <nav>
+        <div class="nav-logo">桂蔗智检</div>
+        <div class="nav-menu">
+            <a href="index.html">首页</a>
+            <a href="identify.html">病害查询</a>
+            <a href="knowledge.html" class="active">蔗园知识库</a>
+            <a href="contact.html">联系我们</a>
+        </div>
+    </nav>
+
+
+<!-- 左上角圆形返回按钮 -->
+<button class="back-btn" onclick="location.href='knowledge.html'">返回</button>
+
+<!-- 页面主体区域（你后续可以在这里加内容） -->
+<div class="page-title">
+    <h1>甘蔗病害专区</h1>
+</div>
+<!-- 你的小卡片代码，就放在这里！ -->
+    <div class="container">
+<div class="item-box" data-id="1">
+    <img  src="images/病害/白条病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗白条病</h3>
+         <p><strong>发病原因及症状：</strong>由白条病菌侵染引起，主要通过病苗、刀具和虫鼠传播。叶片上出现白色细长条斑，像铅笔线一样，严重时整株发白甚至枯死。</p>
+         <p><strong>危害后果：</strong>使植株衰弱，影响正常生长和产量，严重时造成大片减产。</p>
+         <p><strong>防治方法：</strong>严格检疫种苗，发现病株立即拔除，病区不留种，加强工具消毒和田间管理。</p>
+     </div>
+     <div class="item-box" data-id="2">
+        <img  src="images/病害/赤斑病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗赤斑病</h3>
+         <p><strong>发病原因即症状：</strong>由赤斑病菌侵染引起，病菌在温暖潮湿环境下易传播。叶片先出现黄色小斑，后扩大并转为红色或红褐色斑块，病斑可融合成片。</p>
+         <p><strong>危害后果：</strong>破坏叶片功能，降低光合作用效率，使植株早衰，影响产量。</p>
+         <p><strong>防治方法：</strong>选抗病品种，及时清除病叶，收获后清洁田间并烧毁病残体，发病初期喷药控制。</p>
+     </div>
+     <div class="item-box" data-id="3">
+        <img  src="images/病害/赤腐病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗赤腐病</h3>
+          <p><strong>发病原因即症状：</strong>由赤腐病菌侵染引起，病菌可通过种茎、病残体、雨水和伤口传播。病叶中肋先出现红色条斑，后逐渐扩大，茎秆内部组织也会变红腐烂。</p>
+         <p><strong>危害后果：</strong>导致植株腐烂、倒伏、干枯，显著降低产量和含糖量。</p>
+         <p><strong>防治方法：</strong>选用抗病品种，减少虫害和机械伤口，清除病残体，发现病株及时处理，避免病蔗作种。</p>
+     </div>
+     <div class="item-box" data-id="4">
+        <img  src="images/病害/凤梨病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗凤梨病</h3>
+           <p><strong>发病原因即症状：</strong>由凤梨病菌侵染蔗种切口或伤口引起，病菌多从土壤或带菌种苗传播。病蔗切口先发红，后变黑腐烂，常带有类似凤梨的气味，严重时不能萌芽。</p>
+         <p><strong>危害后果：</strong>造成烂种、缺苗、出苗差，影响整田长势，降低后期产量。</p>
+         <p><strong>防治方法：</strong>选健康蔗种，播种前对蔗种进行药剂处理，减少机械损伤和伤口感染，病残体及时清理。</p>
+     </div>
+     <div class="item-box" data-id="5">
+        <img  src="images/病害/黑穗病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗黑穗病</h3>
+          <p><strong>发病原因即症状：</strong>主要由黑穗病菌侵染引起，多在病苗、土壤和风雨传播下发病。病株常表现为植株矮小、节间缩短、叶片细弱，后期在顶部抽出黑色鞭状穗，散出大量黑粉。</p>
+         <p><strong>危害后果：</strong>影响甘蔗正常生长，造成植株退化、减产严重，病株基本失去种植价值。</p>
+         <p><strong>防治方法：</strong>选用抗病品种，严禁用病株留种，发现病株及时拔除并销毁，重病田尽量避免宿根连作。</p>
+     </div>
+     <div class="item-box" data-id="6">
+        <img  src="images/病害/花叶病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗花叶病</h3>
+          <p><strong>发病原因即症状：</strong>由花叶病毒侵染引起，主要通过带病种苗和蚜虫传播。叶片出现黄绿相间的条纹、斑驳或花叶状症状，植株常表现矮化、分蘖少。</p>
+         <p><strong>危害后果：</strong>影响植株正常生长，造成减产、降糖，严重时整田长势不整齐。</p>
+         <p><strong>防治方法：</strong>采用无病种苗和抗病品种，及时拔除病株，加强蚜虫防治，避免与易感禾本科作物混栽。</p>
+     </div>
+     <div class="item-box" data-id="7">
+        <img  src="images/病害/黄斑病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗黄斑病</h3>
+          <p><strong>发病原因即症状：</strong>由黄斑病菌侵染引起，高温多湿条件下容易流行。叶片初期出现黄色小斑点，随后扩展成较大的黄斑，后期病斑可转为红褐色。</p>
+         <p><strong>危害后果：</strong>叶片早枯，减少绿色叶面积，削弱光合作用，影响产量和糖分积累。</p>
+         <p><strong>防治方法：</strong>加强田间管理，保持通风透光，清除病叶和病残体，必要时在发病初期喷药防治。</p>
+     </div>
+     <div class="item-box" data-id="8">
+        <img  src="images/病害/梢腐病.png" alt="甘蔗病害"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h3>名称：甘蔗梢腐病</h3>
+          <p><strong>发病原因即症状：</strong>多由镰刀菌等真菌侵染引起，病菌常随病残体和气流传播。发病时心叶基部先黄化，随后出现红褐色条纹，叶片扭曲皱缩，严重时梢头腐烂。</p>
+         <p><strong>危害后果：</strong>使甘蔗生长受阻，影响光合作用和糖分积累，严重时整株枯死。</p>
+         <p><strong>防治方法：</strong>选抗病品种，合理施肥，避免偏施氮肥，及时清除病株和病残体，发病初期喷药防治。</p>
+     </div>
+ </div>
+ </div>
+<!-- 双击卡片后弹出的窗口 -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <img id="modal-img" src="" alt="病害图片"
+    style="width: 100%; border-radius: 8px; margin-bottom: 15px;
+    max-height: 300px; object-fit: cover;">
+    <h2 id="modal-title"></h2>
+    <p id="modal-desc"></p>
+  </div>
+</div> 
+
+<script>
+ const cards = document.querySelectorAll('.item-box');
+   const modal = document.getElementById('modal');
+   const modalImg = document.getElementById('modal-img');
+   const modalTitle = document.getElementById('modal-title');
+   const modalDesc = document.getElementById('modal-desc');
+   const closeBtn = document.querySelector('.close-btn');
+   // 1. 这里是新加的病害数据
+   const diseaseData = {
+     1: {
+       title: "甘蔗白条病",
+       img: "images/病害/白条病.png",
+       desc: `
+         <p><strong>发病原因即症状：</strong>由白条病菌侵染引起，主要通过病苗、刀具和虫鼠传播。叶片上出现白色细长条斑，像铅笔线一样，严重时整株发白甚至枯死。</p>
+         <p><strong>危害后果：</strong>使植株衰弱，影响正常生长和产量，严重时造成大片减产。</p>
+         <p><strong>防治方法：</strong>严格检疫种苗，发现病株立即拔除，病区不留种，加强工具消毒和田间管理。</p>
+       `
+     },
+     2: {
+       title: "病害1的名字",
+       img: "images/病害/赤斑病.png",
+       desc: `
+          <p><strong>发病原因即症状：</strong>由赤斑病菌侵染引起，病菌在温暖潮湿环境下易传播。叶片先出现黄色小斑，后扩大并转为红色或红褐色斑块，病斑可融合成片。</p>
+         <p><strong>危害后果：</strong>破坏叶片功能，降低光合作用效率，使植株早衰，影响产量。</p>
+         <p><strong>防治方法：</strong>选抗病品种，及时清除病叶，收获后清洁田间并烧毁病残体，发病初期喷药控制。</p>
+       `
+     },
+      3: {
+       title: "病害1的名字",
+       img: "images/病害/赤腐病.png",
+       desc: `
+          <p><strong>发病原因即症状：</strong>由赤腐病菌侵染引起，病菌可通过种茎、病残体、雨水和伤口传播。病叶中肋先出现红色条斑，后逐渐扩大，茎秆内部组织也会变红腐烂。</p>
+         <p><strong>危害后果：</strong>导致植株腐烂、倒伏、干枯，显著降低产量和含糖量。</p>
+         <p><strong>防治方法：</strong>选用抗病品种，减少虫害和机械伤口，清除病残体，发现病株及时处理，避免病蔗作种。</p>
+       `
+     },
+      4: {
+       title: "病害1的名字",
+       img: "images/病害/凤梨病.png",
+       desc: `
+          <p><strong>发病原因即症状：</strong>由凤梨病菌侵染蔗种切口或伤口引起，病菌多从土壤或带菌种苗传播。病蔗切口先发红，后变黑腐烂，常带有类似凤梨的气味，严重时不能萌芽。</p>
+         <p><strong>危害后果：</strong>造成烂种、缺苗、出苗差，影响整田长势，降低后期产量。</p>
+         <p><strong>防治方法：</strong>选健康蔗种，播种前对蔗种进行药剂处理，减少机械损伤和伤口感染，病残体及时清理。</p>
+       `
+     },
+      5: {
+       title: "病害1的名字",
+       img: "images/病害/黑穗病.png",
+       desc: `
+         <p><strong>发病原因即症状：</strong>主要由黑穗病菌侵染引起，多在病苗、土壤和风雨传播下发病。病株常表现为植株矮小、节间缩短、叶片细弱，后期在顶部抽出黑色鞭状穗，散出大量黑粉。</p>
+         <p><strong>危害后果：</strong>影响甘蔗正常生长，造成植株退化、减产严重，病株基本失去种植价值。</p>
+         <p><strong>防治方法：</strong>选用抗病品种，严禁用病株留种，发现病株及时拔除并销毁，重病田尽量避免宿根连作。</p>
+       `
+     },
+      6: {
+       title: "病害1的名字",
+       img: "images/病害/花叶病.png",
+       desc: `
+         <p><strong>发病原因即症状：</strong>由花叶病毒侵染引起，主要通过带病种苗和蚜虫传播。叶片出现黄绿相间的条纹、斑驳或花叶状症状，植株常表现矮化、分蘖少。</p>
+         <p><strong>危害后果：</strong>影响植株正常生长，造成减产、降糖，严重时整田长势不整齐。</p>
+         <p><strong>防治方法：</strong>采用无病种苗和抗病品种，及时拔除病株，加强蚜虫防治，避免与易感禾本科作物混栽。</p>
+       `
+     },
+      7: {
+       title: "病害1的名字",
+       img: "images/病害/黄斑病.png",
+       desc: `
+          <p><strong>发病原因即症状：</strong>由黄斑病菌侵染引起，高温多湿条件下容易流行。叶片初期出现黄色小斑点，随后扩展成较大的黄斑，后期病斑可转为红褐色。</p>
+         <p><strong>危害后果：</strong>叶片早枯，减少绿色叶面积，削弱光合作用，影响产量和糖分积累。</p>
+         <p><strong>防治方法：</strong>加强田间管理，保持通风透光，清除病叶和病残体，必要时在发病初期喷药防治。</p>
+       `
+     },
+      8: {
+       title: "病害1的名字",
+       img: "images/病害/梢腐病.png",
+       desc: `
+          <p><strong>发病原因即症状：</strong>多由镰刀菌等真菌侵染引起，病菌常随病残体和气流传播。发病时心叶基部先黄化，随后出现红褐色条纹，叶片扭曲皱缩，严重时梢头腐烂。</p>
+         <p><strong>危害后果：</strong>使甘蔗生长受阻，影响光合作用和糖分积累，严重时整株枯死。</p>
+         <p><strong>防治方法：</strong>选抗病品种，合理施肥，避免偏施氮肥，及时清除病株和病残体，发病初期喷药防治。</p>
+       `
+     },
+   };
+   // 2. 这里是修改后的双击事件
+   cards.forEach(card => {
+     card.addEventListener('dblclick', function() {
+       const id = this.getAttribute('data-id');
+       const data = diseaseData[id];
+       modalImg.src = data.img;
+       modalTitle.textContent = data.title;
+       modalDesc.innerHTML = data.desc;
+       modal.style.display = 'flex';
+     });
+   });
+
+  // 点击关闭按钮或遮罩层关闭弹窗
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>

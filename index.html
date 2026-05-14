@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桂蔗智检</title>
+    <style>
+        /* 启动页样式 */
+/* 启动页样式 */
+#start {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url(images/bg.jpg) center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  padding-bottom: 50px;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.start-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+  margin-top: 250px;
+  margin-bottom: 150px;
+
+  /* 下面这三行就是：从下面慢慢浮上来 */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: up 0.5s ease forwards;
+}
+
+/* 动画：慢慢上来 + 变清晰 */
+@keyframes up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.start-content h1 {
+  font-size: 80px;          /* 放大字号，和示例图一样醒目 */
+  font-weight: bold;        /* 加粗，更有力量感 */
+  letter-spacing: 12px;     /* 加大字间距，更舒展 */
+  margin-bottom: 20px;      /* 和副标题拉开距离 */
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4); /* 柔和阴影，不融背景 */
+}
+
+.start-content p {
+  font-size: 30px;          /* 适中字号，比主标题小很多 */
+  letter-spacing: 4px;      /* 协调字间距，和标题呼应 */
+  margin-bottom: 50px;      /* 和按钮拉开足够距离 */
+  text-shadow: 0 1px 8px rgba(0,0,0,0.3); /* 柔和阴影，更清晰 */
+}
+
+.start-content button {
+  padding: 14px 45px;
+  font-size: 18px;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.start-content button:hover {
+  background: #3d9c41;
+}
+
+        /* 全局样式重置 */
+        * /* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+
+/* 顶部导航栏 */
+ nav {
+            background-color: #2e9432;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .nav-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 15px;
+        }
+        .nav-menu a.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+/* 首屏banner */
+/* 轮播banner容器 */
+.banner {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+  background: #4CAF50; /* 甘蔗绿兜底背景，防止图片加载失败空白 */
+}
+
+/* 首屏banner */
+.banner {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+  background: #4CAF50;
+}
+
+/* 轮播图 */
+.banner .slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.banner .slide:first-child {
+  opacity: 1;
+}
+
+/* 标题文字（加pointer-events: none，不挡点击） */
+.banner .banner-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  text-align: center;
+  width: 100%;
+  pointer-events: none; /* 关键：让文字不拦截点击 */
+}
+.banner .banner-text h1 {
+  font-size: 48px;
+  color: #fff;
+  margin-bottom: 28px;
+  text-shadow: 2px 2px 4px #000, 0 0 8px rgba(0,0,0,0.8);
+}
+.banner .banner-text p {
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 1px 1px 3px #000, 0 0 6px rgba(0,0,0,0.8);
+}
+
+/* 浅遮罩（加pointer-events: none，不挡点击） */
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.15);
+  z-index: 10;
+  pointer-events: none; /* 关键：让遮罩不拦截点击 */
+}
+
+/* 按钮和圆点（z-index要比遮罩和文字都高） */
+.banner-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  border: none;
+  font-size: 20px;
+  color: #2e9432;
+  cursor: pointer;
+  z-index: 30; /* 关键：比遮罩(10)、文字(15)都高 */
+}
+.prev-btn { left: 20px; }
+.next-btn { right: 20px; }
+.banner-btn:hover {
+  background: #2e9432;
+  color: #fff;
+}
+
+.banner-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 30; /* 关键：比遮罩、文字都高 */
+}
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.indicator.active {
+  background: #2e9432;
+  transform: scale(1.2);
+}
+
+/* 内容区 */
+.content {
+    width: 90%;
+    max-width: 1200px;
+    margin: -30px auto 50px;
+    background-color: #F1F8E9; /* 浅蔗叶色 */
+    padding: 40px 20px;
+    border-radius: 8px;
+    position: relative;
+    z-index: 2;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #2E7D32;
+}
+
+/* 优势卡片 */
+.advantages {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+.advantage-item {
+    width: 22%;
+    min-width: 200px;
+    height: 90px;
+    background-color: #388E3C; /* 甘蔗绿 */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 2px solid #fff;
+}
+.advantage-item h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+.advantage-item p {
+    font-size: 14px;
+}
+
+/* 功能模块 */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+.feature-item {
+    text-align: center;
+    color: #2E7D32;
+}
+.feature-item .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.feature-item p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* 图标链接样式：去掉下划线，保持原样 */
+.feature-item a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 鼠标悬浮图标放大效果 */
+.feature-item a:hover .icon {
+    transform: scale(1.1);
+    transition: all 0.25s ease;
+}
+
+/* 底部提示文字样式 */
+.click-tip {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 16px;
+    color: #555;
+}
+
+    </style>
+</head>
+<body>
+    <!-- 启动封面 -->
+<div id="start">
+  <div class="start-content">
+    <h1>桂蔗智检</h1>
+    <p>精准诊断护航・守护蔗田健康</p>
+    <button onclick="enterHome()">进入首页</button>
+  </div>
+</div>
+
+    <!-- 顶部导航 -->
+      <nav>
+        <div class="nav-logo">桂蔗智检</div>
+        <div class="nav-menu">
+            <a href="index.html" class="active">首页</a>
+            <a href="identify.html">病害查询</a>
+            <a href="knowledge.html" >蔗园知识库</a>
+            <a href="contact.html">联系我们</a>
+        </div>
+    </nav>
+     <!-- 首屏banner -->
+     <div class="banner">
+  <!-- 4张轮播图：把url换成你自己的图片路径！ -->
+  <div class="slide" style="background-image: url('./images/bg.jpg')"></div>
+  <div class="slide" style="background-image: url('./images/bg4.jpg')"></div>
+  <div class="slide" style="background-image: url('./images/bg6.jpg')"></div>
+  <!-- 标题文字 -->
+  <div class="banner-text">
+    <h1>桂蔗智检服务平台</h1> 
+    <p>为广西甘蔗农业提供智能检测服务</p>
+  </div>
+  <button class="banner-btn prev-btn">&lt;</button>
+   <button class="banner-btn next-btn">&gt;</button>
+   <!-- 👇 新增：底部小圆点指示器 -->
+   <div class="banner-indicators">
+     <span class="indicator active"></span>
+     <span class="indicator"></span>
+     <span class="indicator"></span>
+   </div>
+</div>
+     <!-- 主体内容 -->
+     <div class="content">
+         <!-- 我们的优势 -->
+         <h2 class="section-title">我们的优势</h2>
+         <div class="advantages">
+             <div class="advantage-item">
+                 <h3>病害匹配精准</h3>
+                 <p>准确率超98%的病害识别</p>
+             </div>
+             <div class="advantage-item">
+                 <h3>检测速度快</h3>
+                 <p>高效查询，精准结果</p>
+             </div>
+             <div class="advantage-item">
+                 <h3>数据可追溯</h3>
+                 <p>全流程记录，种植有据可依</p>
+             </div>
+             <div class="advantage-item">
+                 <h3>专家指导</h3>
+                 <p>配套专业防治方案</p>
+             </div>
+         </div>
+         <!-- 功能体系（对应版权保护体系） -->
+         <h2 class="section-title">核心功能体系</h2>
+         <div class="features">
+             <div class="feature-item">
+              <a href="identify.html">
+                 <div class="icon">📷</div>
+                 <p>病害标签<br>快速查询</p>
+                 </a>
+             </div>
+             <div class="feature-item">
+              <a href="identify.html">
+                 <div class="icon">🔍</div>
+                 <p>病害识别<br>精准分类</p>
+                 </a>
+             </div>
+             <div class="feature-item">
+              <a href="knowledge.html">
+                 <div class="icon">📊</div>
+                 <p>数据统计<br>生长分析</p>
+                 </a>
+             </div>
+             <div class="feature-item">
+              <a href="knowledge.html">
+                 <div class="icon">💡</div>
+                 <p>防治方案<br>科学指导</p>
+                 </a>
+             </div>
+             <div class="feature-item">
+              <a href="contact.html">
+                 <div class="icon">👥</div>
+                 <p>专家在线<br>一对一咨询</p>
+                 </a>
+             </div>
+         </div>
+         <p class="click-tip">点击图标，即可跳转对应功能页面</p>
+     </div>
+     <script>
+// 页面加载执行
+window.onload = function(){
+    // 如果当前会话已经进入过首页，直接隐藏启动页
+    if(sessionStorage.getItem("enterFlag") === "ok"){
+        document.getElementById("start").style.display = "none";
+    }
+};
+
+// 点击启动页进入首页按钮
+function enterHome(){
+    document.getElementById("start").style.display = "none";
+    // 标记本次会话已进入首页
+    sessionStorage.setItem("enterFlag","ok");
+}
+</script>
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const indicators = document.querySelectorAll('.indicator');
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+  let currentIndex = 0;
+  let autoPlayTimer;
+
+  // 更新轮播状态
+  function updateBanner(index) {
+    slides.forEach((slide, i) => {
+      slide.style.opacity = i === index ? 1 : 0;
+      indicators[i].classList.toggle('active', i === index);
+    });
+  }
+
+  // 上一张
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateBanner(currentIndex);
+    resetAutoPlay();
+  });
+
+  // 下一张
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateBanner(currentIndex);
+    resetAutoPlay();
+  });
+
+  // 点击小圆点切换
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      currentIndex = index;
+      updateBanner(currentIndex);
+      resetAutoPlay();
+    });
+  });
+
+  // 自动轮播
+  function startAutoPlay() {
+    autoPlayTimer = setInterval(() => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateBanner(currentIndex);
+    }, 3000);
+  }
+
+  // 重置自动轮播（点击后重新计时）
+  function resetAutoPlay() {
+    clearInterval(autoPlayTimer);
+    startAutoPlay();
+  }
+
+  // 启动自动轮播
+  startAutoPlay();
+</script>
+
+ </body>
+ </html>
